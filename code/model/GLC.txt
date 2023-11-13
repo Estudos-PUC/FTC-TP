@@ -1,2 +1,3 @@
-T ab b c d e f g h i j k l
-S a b c d e f g h i j k l
+S ASA AB
+A B S
+B b -
