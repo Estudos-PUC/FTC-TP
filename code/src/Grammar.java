@@ -11,9 +11,13 @@ import java.util.Scanner;
  */
 public class Grammar {
     private Map<String, List<String>> grammar = new HashMap<>();
-
+    private char Start; 
     public List<String> getKey(String key) {
         return grammar.get(key);
+    }
+
+    public Map<String, List<String>> getGrammar() {
+        return grammar;
     }
 
     public void loadGrammar(String filePath){
