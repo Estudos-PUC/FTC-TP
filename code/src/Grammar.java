@@ -1,40 +1,48 @@
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Scanner;
+import java.util.Set;
 
 /*
  * Classe utilizada para transformar os dados dos txt em uma GLC
  */
 public class Grammar {
-    private Map<String, List<String>> grammar = new HashMap<>();
-    private char Start; 
-    public List<String> getKey(String key) {
-        return grammar.get(key);
+    Set<String> variables;
+    Set<String> terminals;
+    Map<String, Set<String>> productions;
+    String startSymbol;
+    int variableIndex;
+
+    public Grammar(Set<String> variables, Set<String> terminals, Map<String, Set<String>> productions,
+            String startSymbol) {
+        this.variables = variables;
+        this.terminals = terminals;
+        this.productions = productions;
+        this.startSymbol = startSymbol;
+        this.variableIndex = 0;
     }
 
-    public Map<String, List<String>> getGrammar() {
-        return grammar;
+    public String getNextVariableName() {
+        if (variableIndex >= 26 * 101) { // Checa se excedeu o limite de Z100
+            throw new IllegalStateException("Excedido o número máximo de variáveis.");
+        }
+        int quotient = variableIndex / 101; // Calcula qual letra usar (0 para A, 1 para B, etc.)
+        int remainder = variableIndex % 101; // Calcula o número (0 a 100)
+        char nextChar = (char) ('A' + quotient);
+        String nextVariable = nextChar + String.format("%02d", remainder);
+        variableIndex++; // Incrementa o índice para a próxima variável
+        return nextVariable;
     }
 
-    public void loadGrammar(String filePath){
-        try {
-            File file = new File(filePath);
-            Scanner sc = new Scanner(file);
-
-            while (sc.hasNextLine()) {
-                String[] parts = sc.nextLine().split(" ");
-  
-                String key = parts[0];
-                List<String> value = Arrays.asList(parts).subList(1, parts.length);
-                grammar.put(key, value);
-            }
-            sc.close();
-        } catch (FileNotFoundException e){
-            e.printStackTrace();
+    public void printGrammar() {
+        System.out.println("Variáveis: " + this.variables);
+        System.out.println("Terminais: " + this.terminals);
+        System.out.println("Símbolo inicial: " + this.startSymbol);
+        System.out.println("Produções:");
+        for (Map.Entry<String, Set<String>> entry : this.productions.entrySet()) {
+            String variable = entry.getKey();
+            Set<String> rules = entry.getValue();
+            System.out.println("  " + variable + " -> " + rules);
         }
     }
+
+
 }

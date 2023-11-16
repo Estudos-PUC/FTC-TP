@@ -1,3 +1,7 @@
-S ASA AB
-A B S
-B b -
+variables: L, S, E
+terminals: (, ), a
+start: L
+L (S)
+S SE ""
+E a L
+-
