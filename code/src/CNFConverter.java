@@ -251,9 +251,9 @@ public class CNFConverter {
 
     // ------------------------ FIM ELIMINACAO DE REGRAS UNITARIAS------------------------------ //
 
-    // ------------------------ PENULTIMA PARTE ----------------------------------------------------
+    // ------------------------ TRATAR TERMINAIS ----------------------------------------------------
 
-    // 1. encontrar regras com lado direito maior que 2
+    // substituir variaveis terminais que não são producoes unitarias e criar novas regras  
     public static void productionsWithTwoOrMoreSymbols(Grammar g) {
         Map<String, Set<String>> productionsWithTwoOrMoreSymbols = new HashMap<>();
         Map<String, String> newVariablesForTerminals = new HashMap<>(); // Guarda as novas variáveis para terminais
@@ -331,7 +331,8 @@ public class CNFConverter {
         }
     }
 
-    // --------------------------------------------------------------------------------------------
+    // ------------------------ FIM  TRATAR TERMINAIS ------------------------------ //
+
 
     private static void breakDownProductions(Grammar grammar) {
         Map<String, String> symbolToVariableMap = new HashMap<>();
