@@ -27,7 +27,7 @@ public class Grammar {
 
             while (sc.hasNextLine()) {
                 String[] parts = sc.nextLine().split(" ");
-
+  
                 String key = parts[0];
                 List<String> value = Arrays.asList(parts).subList(1, parts.length);
                 grammar.put(key, value);

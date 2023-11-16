@@ -9,7 +9,8 @@ public class LambdaRulesRemover {
         Map<String, Set<String>> productions;
         String startSymbol;
 
-        public Grammar(Set<String> variables, Set<String> terminals, Map<String, Set<String>> productions, String startSymbol) {
+        public Grammar(Set<String> variables, Set<String> terminals, Map<String, Set<String>> productions,
+                String startSymbol) {
             this.variables = variables;
             this.terminals = terminals;
             this.productions = productions;
@@ -19,7 +20,7 @@ public class LambdaRulesRemover {
 
     public static void main(String[] args) {
         // Exemplo de inicialização da gramática
-        Set<String> variables = new HashSet<>(Arrays.asList("S","S0", "A", "B"));
+        Set<String> variables = new HashSet<>(Arrays.asList("S", "S0", "A", "B"));
         Set<String> terminals = new HashSet<>(Arrays.asList("a", "b"));
         Map<String, Set<String>> productions = new HashMap<>();
         productions.put("S0", new HashSet<>(Arrays.asList("S")));
@@ -30,7 +31,7 @@ public class LambdaRulesRemover {
         Grammar g = new Grammar(variables, terminals, productions, "S");
 
         Grammar gPrime = removeLambdaRules(g);
-        
+
         // Imprimindo a nova gramática
         System.out.println("Nova gramática sem regras lambda:");
         gPrime.productions.forEach((key, value) -> System.out.println(key + " -> " + value));
@@ -93,29 +94,29 @@ public class LambdaRulesRemover {
         return nullable;
     }
 
-// Método para gerar todas as combinações de produção sem variáveis anuláveis
-public static Set<String> getCombinations(String production, Set<String> nullableVariables) {
-    Set<String> combinations = new HashSet<>();
-    combinations.add(production); // Adicionar a produção original
+    // Método para gerar todas as combinações de produção sem variáveis anuláveis
+    public static Set<String> getCombinations(String production, Set<String> nullableVariables) {
+        Set<String> combinations = new HashSet<>();
+        combinations.add(production); // Adicionar a produção original
 
-    // Criar combinações removendo as variáveis anuláveis uma por vez
-    for (int i = 0; i < production.length(); i++) {
-        // Se o caractere atual é uma variável anulável, criamos novas combinações
-        if (nullableVariables.contains(String.valueOf(production.charAt(i)))) {
-            List<String> newCombinations = new ArrayList<>();
-            for (String existingCombination : combinations) {
-                // Se o caractere anulável não estiver no final da string
-                if (i < existingCombination.length()) {
-                    // Criamos uma nova combinação sem o caractere anulável
-                    newCombinations.add(existingCombination.substring(0, i) + existingCombination.substring(i + 1));
+        // Criar combinações removendo as variáveis anuláveis uma por vez
+        for (int i = 0; i < production.length(); i++) {
+            // Se o caractere atual é uma variável anulável, criamos novas combinações
+            if (nullableVariables.contains(String.valueOf(production.charAt(i)))) {
+                List<String> newCombinations = new ArrayList<>();
+                for (String existingCombination : combinations) {
+                    // Se o caractere anulável não estiver no final da string
+                    if (i < existingCombination.length()) {
+                        // Criamos uma nova combinação sem o caractere anulável
+                        newCombinations.add(existingCombination.substring(0, i) + existingCombination.substring(i + 1));
+                    }
                 }
+                combinations.addAll(newCombinations);
             }
-            combinations.addAll(newCombinations);
         }
-    }
-    // Remover a produção vazia se ela não for válida para o símbolo de início
-    combinations.remove("");
+        // Remover a produção vazia se ela não for válida para o símbolo de início
+        combinations.remove("");
 
-    return combinations;
-}
+        return combinations;
+    }
 }
