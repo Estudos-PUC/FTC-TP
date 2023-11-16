@@ -6,6 +6,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class CNFConverter {
     // Classe para representar uma gramática
@@ -55,14 +57,14 @@ public class CNFConverter {
     }
 
     public static void main(String[] args) {
-        Set<String> variables = new HashSet<>(Arrays.asList("L", "S", "E"));
-        Set<String> terminals = new HashSet<>(Arrays.asList("(", ")", "a"));
+        Set<String> variables = new HashSet<>(Arrays.asList("E", "T", "F"));
+        Set<String> terminals = new HashSet<>(Arrays.asList("(", ")", "*", "t"));
         Map<String, Set<String>> productions = new HashMap<>();
-        productions.put("L", new HashSet<>(Arrays.asList("(S)")));
-        productions.put("S", new HashSet<>(Arrays.asList("SE", "")));
-        productions.put("E", new HashSet<>(Arrays.asList("a", "L")));
+        productions.put("E", new HashSet<>(Arrays.asList("E+T", "T")));
+        productions.put("T", new HashSet<>(Arrays.asList("T*F", "F")));
+        productions.put("F", new HashSet<>(Arrays.asList("(E)", "t")));
 
-        Grammar g = new Grammar(variables, terminals, productions, "L");
+        Grammar g = new Grammar(variables, terminals, productions, "E");
         Grammar noLambda = removeLambdaRules(g);
 
         // Imprimindo a nova gramatica
@@ -76,6 +78,8 @@ public class CNFConverter {
         // System.out.println("FIM");
         System.out.println("Nova gramatica quase final:");
         productionsWithTwoOrMoreSymbols(noUnitary);
+        noUnitary.printGrammar();
+        breakDownProductions(noUnitary);
         noUnitary.printGrammar();
         
     }
@@ -327,5 +331,61 @@ public class CNFConverter {
 
     // --------------------------------------------------------------------------------------------
 
+    private static void breakDownProductions(Grammar grammar) {
+        Map<String, String> symbolToVariableMap = new HashMap<>();
+        Map<String, Set<String>> newProductions = new HashMap<>();
+
+        for (Map.Entry<String, Set<String>> entry : grammar.productions.entrySet()) {
+            String variable = entry.getKey();
+            Set<String> rules = entry.getValue();
+
+            for (String rule : rules) {
+                List<String> symbols = splitSymbols(rule);
+
+                if (symbols.size() > 2) {
+                    String currentVariable = variable;
+                    for (int i = 0; i < symbols.size() - 2; i++) {
+                        String nextSymbol = symbols.get(i + 1);
+                        String newVariable = symbolToVariableMap.getOrDefault(nextSymbol, grammar.getNextVariableName());
+                        symbolToVariableMap.putIfAbsent(nextSymbol, newVariable);
+
+                        Set<String> currentRules = newProductions.computeIfAbsent(currentVariable, k -> new HashSet<>());
+                        currentRules.add(symbols.get(i) + newVariable);
+
+                        currentVariable = newVariable;
+                    }
+                    // Add the final rule which will have exactly two symbols
+                    newProductions.computeIfAbsent(currentVariable, k -> new HashSet<>())
+                                  .add(symbols.get(symbols.size() - 2) + symbols.get(symbols.size() - 1));
+                } else {
+                    // Rule already has two or fewer symbols, so we simply add it to the new productions
+                    newProductions.computeIfAbsent(variable, k -> new HashSet<>()).add(rule);
+                }
+            }
+        }
+
+        // Update the grammar's productions with the new productions, eliminating any duplicates
+        for (Map.Entry<String, Set<String>> entry : newProductions.entrySet()) {
+            String variable = entry.getKey();
+            Set<String> newRules = entry.getValue();
+            grammar.productions.put(variable, newRules);
+        }
+
+        // Update the grammar's variables with the new variables
+        grammar.variables.addAll(symbolToVariableMap.values());
+    }
+
+
+    private static List<String> splitSymbols(String rule) {
+        // Expressão regular para combinar nomes de variáveis como A, A00, A001, B00, etc.
+        Matcher matcher = Pattern.compile("[A-Z][0-9]*").matcher(rule);
+        List<String> symbols = new ArrayList<>();
+
+        while (matcher.find()) {
+            symbols.add(matcher.group());
+        }
+
+        return symbols;
+    }
 }
 
