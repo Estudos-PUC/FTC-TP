@@ -1,7 +1,7 @@
-variables: L, S, E
-terminals: (, ), a
+variables: L,S,E
+terminals: (,),a
 start: L
 L (S)
-S SE ""
+S SE /
 E a L
 -

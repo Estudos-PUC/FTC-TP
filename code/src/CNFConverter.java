@@ -10,80 +10,34 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class CNFConverter {
-    // Classe para representar uma gramática
-    static class Grammar {
-        Set<String> variables;
-        Set<String> terminals;
-        Map<String, Set<String>> productions;
-        String startSymbol;
-        int variableIndex;
+    Grammar g;
 
-        public Grammar(Set<String> variables, Set<String> terminals, Map<String, Set<String>> productions,
-                String startSymbol) {
-            this.variables = variables;
-            this.terminals = terminals;
-            this.productions = productions;
-            this.startSymbol = startSymbol;
-            this.variableIndex = 0; 
-        }
-
-        public String getNextVariableName() {
-            if (variableIndex >= 26 * 101) { // Checa se excedeu o limite de Z100
-                throw new IllegalStateException("Excedido o número máximo de variáveis.");
-            }
-            int quotient = variableIndex / 101; // Calcula qual letra usar (0 para A, 1 para B, etc.)
-            int remainder = variableIndex % 101; // Calcula o número (0 a 100)
-            char nextChar = (char) ('A' + quotient);
-            String nextVariable = nextChar + String.format("%02d", remainder);
-            variableIndex++; // Incrementa o índice para a próxima variável
-            return nextVariable;
-        }
-
-    
-        public void printGrammar() {
-            System.out.println("Variáveis: " + this.variables);
-            System.out.println("Terminais: " + this.terminals);
-            System.out.println("Símbolo inicial: " + this.startSymbol);
-            System.out.println("Produções:");
-            for (Map.Entry<String, Set<String>> entry : this.productions.entrySet()) {
-                String variable = entry.getKey();
-                Set<String> rules = entry.getValue();
-                System.out.println("  " + variable + " -> " + rules);
-            }
-        }
+    public CNFConverter(Grammar grammar){
+        this.g = grammar ;
     }
-
-    private static void addProductions(Map<String, Set<String>> productions, String variable, Set<String> newRules) {
-        productions.put(variable, newRules);
-    }
-
-    public static void main(String[] args) {
-        Set<String> variables = new HashSet<>(Arrays.asList("L", "S", "E"));
-        Set<String> terminals = new HashSet<>(Arrays.asList("(", ")", "a"));
-        Map<String, Set<String>> productions = new HashMap<>();
-        productions.put("L", new HashSet<>(Arrays.asList("(S)")));
-        productions.put("S", new HashSet<>(Arrays.asList("SE", "")));
-        productions.put("E", new HashSet<>(Arrays.asList("a", "L")));
-
-        Grammar g = new Grammar(variables, terminals, productions, "L");
+    public void start() {
         Grammar noLambda = removeLambdaRules(g);
 
         // Imprimindo a nova gramatica
-        System.out.println("Nova gramatica sem regras lambda:");
-        noLambda.printGrammar();
+        //System.out.println("Nova gramatica sem regras lambda:");
+        //noLambda.printGrammar();
 
         Grammar noUnitary = removeUnitaryRules(noLambda);
-        System.out.println("Nova gramatica sem regras unitarias:");
-        noUnitary.printGrammar();
+        //System.out.println("Nova gramatica sem regras unitarias:");
+        //noUnitary.printGrammar();
 
         // System.out.println("FIM");
-        System.out.println("Nova gramatica quase final:");
+        //System.out.println("Nova gramatica quase final:");
         productionsWithTwoOrMoreSymbols(noUnitary);
-        noUnitary.printGrammar();
+        //noUnitary.printGrammar();
         
         breakDownProductions(noUnitary);
         noUnitary.printGrammar();
+        g = noUnitary;
         
+    }
+    private static void addProductions(Map<String, Set<String>> productions, String variable, Set<String> newRules) {
+        productions.put(variable, newRules);
     }
 
     // ----------------------------- REMOCAO DE REGRAS LAMBDA --------------------------=========
@@ -109,7 +63,7 @@ public class CNFConverter {
                 }
             }
             if (!variable.equals(g.startSymbol) || nullableVariables.contains(g.startSymbol)) {
-                newRules.remove(""); // Remover regras lambda, exceto para o símbolo de início se necessário
+                newRules.remove("/"); // Remover regras lambda, exceto para o símbolo de início se necessário
             }
             addProductions(newProductions, variable, newRules);
         }
@@ -126,7 +80,7 @@ public class CNFConverter {
             for (String variable : g.variables) {
                 if (!nullable.contains(variable)) {
                     Set<String> rules = g.productions.get(variable);
-                    if (rules != null && rules.contains("")) {
+                    if (rules != null && rules.contains("/")) {
                         nullable.add(variable);
                         changes = true;
                     } else {
