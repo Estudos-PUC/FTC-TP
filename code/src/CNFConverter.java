@@ -58,7 +58,7 @@ public class CNFConverter {
 
     public static void main(String[] args) {
         Set<String> variables = new HashSet<>(Arrays.asList("E", "T", "F"));
-        Set<String> terminals = new HashSet<>(Arrays.asList("(", ")", "*", "t"));
+        Set<String> terminals = new HashSet<>(Arrays.asList("(", ")", "*", "t", "+"));
         Map<String, Set<String>> productions = new HashMap<>();
         productions.put("E", new HashSet<>(Arrays.asList("E+T", "T")));
         productions.put("T", new HashSet<>(Arrays.asList("T*F", "F")));
