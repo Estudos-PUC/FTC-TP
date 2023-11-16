@@ -28,17 +28,17 @@ public class CNFConverter {
         }
 
         public String getNextVariableName() {
-            // Começamos de "AA" que é equivalente ao índice 0 neste esquema
-            int index = variableIndex + 26; // Ajusta o índice para começar de "AA"
-            String nextVariable = "";
-            do {
-                nextVariable = (char) ('A' + index % 26) + nextVariable;
-                index = (index / 26) - 1; // Move para o próximo caractere no nome e ajusta por causa do deslocamento inicial
-            } while (index >= 0);
-
+            if (variableIndex >= 26 * 101) { // Checa se excedeu o limite de Z100
+                throw new IllegalStateException("Excedido o número máximo de variáveis.");
+            }
+            int quotient = variableIndex / 101; // Calcula qual letra usar (0 para A, 1 para B, etc.)
+            int remainder = variableIndex % 101; // Calcula o número (0 a 100)
+            char nextChar = (char) ('A' + quotient);
+            String nextVariable = nextChar + String.format("%02d", remainder);
             variableIndex++; // Incrementa o índice para a próxima variável
             return nextVariable;
         }
+
     
         public void printGrammar() {
             System.out.println("Variáveis: " + this.variables);
@@ -58,14 +58,12 @@ public class CNFConverter {
     }
 
     public static void main(String[] args) {
-        Set<String> variables = new HashSet<>(Arrays.asList("L", "S", "E", "F", "G"));
+        Set<String> variables = new HashSet<>(Arrays.asList("L", "S", "E"));
         Set<String> terminals = new HashSet<>(Arrays.asList("(", ")", "a"));
         Map<String, Set<String>> productions = new HashMap<>();
         productions.put("L", new HashSet<>(Arrays.asList("(S)")));
         productions.put("S", new HashSet<>(Arrays.asList("SE", "")));
         productions.put("E", new HashSet<>(Arrays.asList("a", "L")));
-        productions.put("F", new HashSet<>(Arrays.asList("a", "L")));
-        productions.put("G", new HashSet<>(Arrays.asList("SE", "")));
 
         Grammar g = new Grammar(variables, terminals, productions, "L");
         Grammar noLambda = removeLambdaRules(g);
@@ -82,6 +80,7 @@ public class CNFConverter {
         System.out.println("Nova gramatica quase final:");
         productionsWithTwoOrMoreSymbols(noUnitary);
         noUnitary.printGrammar();
+        
         breakDownProductions(noUnitary);
         noUnitary.printGrammar();
         
