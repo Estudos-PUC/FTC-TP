@@ -24,7 +24,6 @@ public class ALLGrammars {
                 Set<String> terminals = new HashSet<>(
                         Arrays.asList(sc.nextLine().replace("terminals: ", "").split(",")));
                 String startSymbol = sc.nextLine().replace("start: ", "");
-                boolean flag = true;
                 // Ler producoes
                 String line = sc.nextLine();
                 while (!(line.equals("-"))) {

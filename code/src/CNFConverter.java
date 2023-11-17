@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -291,13 +290,15 @@ public class CNFConverter {
     private static void breakDownProductions(Grammar grammar) {
         Map<String, String> symbolToVariableMap = new HashMap<>();
         Map<String, Set<String>> newProductions = new HashMap<>();
-
+        List<String> allSymbols = new ArrayList<>();
+        allSymbols.addAll(grammar.terminals);
+        allSymbols.addAll(grammar.variables);
         for (Map.Entry<String, Set<String>> entry : grammar.productions.entrySet()) {
             String variable = entry.getKey();
             Set<String> rules = entry.getValue();
 
             for (String rule : rules) {
-                List<String> symbols = splitSymbols(rule);
+                List<String> symbols = splitSymbols(allSymbols,rule);
 
                 if (symbols.size() > 2) {
                     String currentVariable = variable;
@@ -333,16 +334,28 @@ public class CNFConverter {
     }
 
 
-    private static List<String> splitSymbols(String rule) {
-        // Expressão regular para combinar nomes de variáveis como A, A00, A001, B00, etc.
-        Matcher matcher = Pattern.compile("[A-Z][0-9]*").matcher(rule);
-        List<String> symbols = new ArrayList<>();
+    public static List<String> splitSymbols(List<String> allSymbols, String input) {
+        // Ordenar os símbolos pelo comprimento em ordem decrescente
 
-        while (matcher.find()) {
-            symbols.add(matcher.group());
+        allSymbols.sort((a, b) -> b.length() - a.length());
+
+        // Criar uma expressão regular que combina com qualquer um dos símbolos
+        StringBuilder regex = new StringBuilder();
+        for (String symbol : allSymbols) {
+            if (regex.length() > 0) {
+                regex.append("|");
+            }
+            regex.append(Pattern.quote(symbol));
         }
 
-        return symbols;
+        // Encontrar correspondências na string de entrada
+        Matcher matcher = Pattern.compile(regex.toString()).matcher(input);
+        List<String> splitSymbols = new ArrayList<>();
+        while (matcher.find()) {
+            splitSymbols.add(matcher.group());
+        }
+
+        return splitSymbols;
     }
 }
 
