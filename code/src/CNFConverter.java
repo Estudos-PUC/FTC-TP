@@ -25,7 +25,6 @@ public class CNFConverter {
         //System.out.println("Nova gramatica sem regras unitarias:");
         //noUnitary.printGrammar();
 
-        // System.out.println("FIM");
         //System.out.println("Nova gramatica quase final:");
         productionsWithTwoOrMoreSymbols(noUnitary);
         //noUnitary.printGrammar();
