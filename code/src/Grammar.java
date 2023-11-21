@@ -1,10 +1,12 @@
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
 /*
  * Classe utilizada para transformar os dados dos txt em uma GLC
  */
-public class Grammar {
+public class Grammar implements Cloneable {
     Set<String> variables;
     Set<String> terminals;
     Map<String, Set<String>> productions;
@@ -43,6 +45,20 @@ public class Grammar {
             System.out.println("  " + variable + " -> " + rules);
         }
     }
-
-
+    @Override
+    public Grammar clone() {
+        try {
+            Grammar cloned = (Grammar) super.clone();
+            cloned.variables = new HashSet<>(this.variables);
+            cloned.terminals = new HashSet<>(this.terminals);
+            cloned.productions = new HashMap<>();
+            for (Map.Entry<String, Set<String>> entry : this.productions.entrySet()) {
+                cloned.productions.put(entry.getKey(), new HashSet<>(entry.getValue()));
+            }
+            // Não é necessário clonar startSymbol e variableIndex, pois são imutáveis ou primitivos
+            return cloned;
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError(); // Não deve acontecer, pois estamos implementando Cloneable
+        }
+    }
 }
