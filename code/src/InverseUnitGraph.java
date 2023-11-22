@@ -1,11 +1,7 @@
 import java.util.*;
 
 public class InverseUnitGraph {
-    private Map<String, Set<String>> graph;
-
-    public InverseUnitGraph() {
-        this.graph = new HashMap<>();
-    }
+    private Map<String, Set<String>> graph = new HashMap<>();
 
     public void addEdge(String from, String to) {
         graph.computeIfAbsent(from, k -> new HashSet<>()).add(to);
@@ -19,11 +15,9 @@ public class InverseUnitGraph {
 
         while (!queue.isEmpty()) {
             String current = queue.poll();
-            Set<String> neighbours = graph.getOrDefault(current, Collections.emptySet());
-            for (String neighbour : neighbours) {
-                if (!reachable.contains(neighbour)) {
-                    reachable.add(neighbour);
-                    queue.add(neighbour);
+            for (String neighbor : graph.getOrDefault(current, Collections.emptySet())) {
+                if (reachable.add(neighbor)) {
+                    queue.add(neighbor);
                 }
             }
         }
