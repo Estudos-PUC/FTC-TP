@@ -1,5 +1,5 @@
 variables: E,T,F,I
-terminals: a,b,0,1,(, ),+,∗
+terminals: a,b,0,1,(,),+,*
 start: E
 E T E+T
 T F T*F
