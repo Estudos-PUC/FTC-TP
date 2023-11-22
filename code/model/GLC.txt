@@ -1,7 +1,8 @@
-variables: L,S,E
-terminals: (,),a
-start: L
-L (S)
-S SE /
-E a L
+variables: E,T,F,I
+terminals: a,b,0,1,(, ),+,∗
+start: E
+E T E+T
+T F T*F
+F aI bI (E)
+I 0I 1I /
 -
