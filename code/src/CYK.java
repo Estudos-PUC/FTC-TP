@@ -17,7 +17,6 @@ class CYK {
         this.allSymbols.addAll(terminals);
         this.allSymbols.addAll(non_terminal);
         this.R = splitRules(grammar);
-        System.out.println();
     }
 
     public Map<String, List<List<String>>> splitRules(Grammar grammar) {
@@ -30,7 +29,6 @@ class CYK {
             List<String> symbols= new ArrayList<>();
             for (String rule : rules) {
                 symbols = splitSymbols(allSymbols, rule);
-                System.out.println();
                 convertRules.add(symbols);
             }
             tmp.put(variable, convertRules);

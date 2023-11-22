@@ -10,11 +10,15 @@ public class Main {
         System.out.println(cnf.g.productions);
         cnf.start();
         System.out.println("----------------------------------------------------------------");
-        System.out.println(cnf.g.productions);
+        System.out.print(cnf.g.productions);
         System.out.println(allGrammars.grammars.get(0).productions);
-        System.out.println("----------------------------------------------------------------");
+        System.out.print("----------------------------------------------------------------");
+        
         BINConverter binConverter = new BINConverter(allGrammars.grammars.get(0).clone());
         binConverter.printGrammar();
+        binConverter.printNullable();
+
+
         List<String> w = Arrays.asList( "(","a", ")");
 
         CYK cyk = new CYK(cnf.g);
