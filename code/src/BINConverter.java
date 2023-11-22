@@ -18,6 +18,7 @@ public class BINConverter {
     Map<String, List<List<String>>> R = new HashMap<>();
     Set<String> nullableSymbols;
 
+
     public BINConverter(Grammar grammar) {
         grammar = breakDownProductions(grammar);
         this.terminals = grammar.terminals;
@@ -224,7 +225,4 @@ public class BINConverter {
             System.out.println(symbol);
         }
     }
-
-    // GRAFO ----------------------------------------------------
-
 }
