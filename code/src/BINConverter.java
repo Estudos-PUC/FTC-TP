@@ -228,39 +228,4 @@ public class BINConverter {
             System.out.println(symbol);
         }
     }
-
-
-    private void constructUnitRelations() {
-        this.unitRelation = new HashMap<>();
-        this.inverseUnitRelation = new HashMap<>();
-
-        for (String nonTerminal : non_terminal) {
-            unitRelation.put(nonTerminal, new HashSet<>());
-            inverseUnitRelation.put(nonTerminal, new HashSet<>());
-        }
-
-        for (Map.Entry<String, List<List<String>>> entry : R.entrySet()) {
-            String leftSide = entry.getKey();
-            for (List<String> production : entry.getValue()) {
-                if (production.size() == 1 && non_terminal.contains(production.get(0))) {
-                    String rightSide = production.get(0);
-                    unitRelation.get(leftSide).add(rightSide);
-                    inverseUnitRelation.get(rightSide).add(leftSide);
-                }
-            }
-        }
-    }
-
-    public void printRelation(String msg, Map<String, Set<String>> Relation) {
-        System.out.println(msg);
-        for (Map.Entry<String, Set<String>> entry : Relation.entrySet()) {
-            String key = entry.getKey();
-            Set<String> values = entry.getValue();
-            System.out.print(key + " -> ");
-            for (String value : values) {
-                System.out.print(value + " ");
-            }
-            System.out.println();
-        }
-    }
 }
