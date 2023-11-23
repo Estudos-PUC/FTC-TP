@@ -1,3 +1,5 @@
+package CYK_Mod;
+
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -8,6 +10,8 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.Iterator;
 import java.util.regex.Pattern;
+
+import Gramatica.Grammar;
 
 public class BINConverter {
     int variableIndex;

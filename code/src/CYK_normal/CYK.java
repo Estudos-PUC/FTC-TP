@@ -1,8 +1,11 @@
+package CYK_normal;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-class CYK {
+import Gramatica.Grammar;
+
+public class CYK {
 
     // Non-terminals symbols
     Set<String> terminals;
@@ -60,7 +63,11 @@ class CYK {
     }
 
     // function to perform the CYK Algorithm
-    void cykParse(List<String> w) {
+    public void cykParse(String word) {
+        List<String> w = new ArrayList<>();
+        for (int i = 0; i < word.length(); i++) {
+            w.add("" + word.charAt(i));
+        }
         int n = w.size();
 
         // Initialize the table

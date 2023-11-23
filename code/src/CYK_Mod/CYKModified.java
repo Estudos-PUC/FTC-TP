@@ -1,4 +1,8 @@
+package CYK_Mod;
+
 import java.util.*;
+
+import Gramatica.Grammar;
 
 public class CYKModified {
 

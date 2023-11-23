@@ -1,3 +1,5 @@
+package Gramatica;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -7,19 +9,21 @@ import java.util.Set;
  * Classe utilizada para transformar os dados dos txt em uma GLC
  */
 public class Grammar implements Cloneable {
-    Set<String> variables;
-    Set<String> terminals;
-    Map<String, Set<String>> productions;
-    String startSymbol;
-    int variableIndex;
+    public Set<String> variables;
+    public Set<String> terminals;
+    public Map<String, Set<String>> productions;
+    public String startSymbol;
+    public int variableIndex;
+    public ArrayList<String> word;
 
     public Grammar(Set<String> variables, Set<String> terminals, Map<String, Set<String>> productions,
-            String startSymbol) {
+            String startSymbol, ArrayList<String> word) {
         this.variables = variables;
         this.terminals = terminals;
         this.productions = productions;
         this.startSymbol = startSymbol;
         this.variableIndex = 0;
+        this.word = word;
     }
 
     public String getNextVariableName() {

@@ -1,3 +1,4 @@
+package Gramatica;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -9,7 +10,7 @@ import java.util.Scanner;
 import java.util.Set;
 
 public class ALLGrammars {
-    ArrayList<Grammar> grammars = new ArrayList<Grammar>();
+    public ArrayList<Grammar> grammars = new ArrayList<Grammar>();
 
     public void loadGrammar(String filePath) {
         try {
@@ -17,7 +18,7 @@ public class ALLGrammars {
             Scanner sc = new Scanner(file);
 
             while (sc.hasNextLine()) {
-
+                ArrayList<String> word = new ArrayList<>();
                 Map<String, Set<String>> productions = new HashMap<>();
                 Set<String> variables = new HashSet<>(
                         Arrays.asList(sc.nextLine().replace("variables: ", "").split(",")));
@@ -26,14 +27,20 @@ public class ALLGrammars {
                 String startSymbol = sc.nextLine().replace("start: ", "");
                 // Ler producoes
                 String line = sc.nextLine();
-                while (!(line.equals("-"))) {
+
+                while (!(line.equals("#"))) {
                     String[] parts = line.split(" ");
                     String key = parts[0];
 
                     productions.put(key, new HashSet<>(Arrays.asList(parts).subList(1, parts.length)));
                     line = sc.nextLine();
                 }
-                Grammar tmp = new Grammar(variables, terminals, productions, startSymbol);
+                line = sc.nextLine();
+                while (!(line.equals("#"))) {
+                    word.add(line);
+                    line = sc.nextLine();
+                }
+                Grammar tmp = new Grammar(variables, terminals, productions, startSymbol, word);
                 grammars.add(tmp);
             }
 

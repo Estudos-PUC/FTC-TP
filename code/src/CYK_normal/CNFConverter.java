@@ -1,3 +1,4 @@
+package CYK_normal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -8,31 +9,17 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import Gramatica.Grammar;
+
 public class CNFConverter {
-    Grammar g;
+    public Grammar g;
 
     public CNFConverter(Grammar grammar){
+        grammar = removeLambdaRules(grammar);
+        grammar = removeUnitaryRules(grammar);
+        productionsWithTwoOrMoreSymbols(grammar);
+        breakDownProductions(grammar);
         this.g = grammar ;
-    }
-    public void start() {
-        Grammar noLambda = removeLambdaRules(g);
-
-        // Imprimindo a nova gramatica
-        //System.out.println("Nova gramatica sem regras lambda:");
-        //noLambda.printGrammar();
-
-        Grammar noUnitary = removeUnitaryRules(noLambda);
-        //System.out.println("Nova gramatica sem regras unitarias:");
-        //noUnitary.printGrammar();
-
-        //System.out.println("Nova gramatica quase final:");
-        productionsWithTwoOrMoreSymbols(noUnitary);
-        //noUnitary.printGrammar();
-        
-        breakDownProductions(noUnitary);
-        //noUnitary.printGrammar();
-        g = noUnitary;
-        
     }
     private static void addProductions(Map<String, Set<String>> productions, String variable, Set<String> newRules) {
         productions.put(variable, newRules);
@@ -66,7 +53,7 @@ public class CNFConverter {
             addProductions(newProductions, variable, newRules);
         }
 
-        return new Grammar(g.variables, g.terminals, newProductions, g.startSymbol);
+        return new Grammar(g.variables, g.terminals, newProductions, g.startSymbol, g.word);
     }
 
     // Método para encontrar variáveis anuláveis
@@ -166,7 +153,7 @@ public class CNFConverter {
         }
 
         // Retorna a nova gramática com o conjunto de produções atualizado
-        return new Grammar(g.variables, g.terminals, newProductions, g.startSymbol);
+        return new Grammar(g.variables, g.terminals, newProductions, g.startSymbol, g.word);
     }
 
     // Método para encontrar variáveis encadeadas
