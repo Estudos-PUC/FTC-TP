@@ -30,7 +30,7 @@ public class CNFConverter {
         //noUnitary.printGrammar();
         
         breakDownProductions(noUnitary);
-        noUnitary.printGrammar();
+        //noUnitary.printGrammar();
         g = noUnitary;
         
     }
@@ -279,7 +279,7 @@ public class CNFConverter {
             Set<String> newRule = new HashSet<>(Collections.singletonList(terminal));
             addProductions(g.productions, newVariable, newRule);
             g.variables.add(newVariable);
-            System.out.println("Criada nova variável " + newVariable + " com a regra " + newVariable + " -> " + terminal);
+            //System.out.println("Criada nova variável " + newVariable + " com a regra " + newVariable + " -> " + terminal);
         }
     }
 

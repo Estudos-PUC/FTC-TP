@@ -16,10 +16,10 @@ public class BINConverter {
     List<String> allSymbols = new ArrayList<>();
     Map<String, List<List<String>>> R = new HashMap<>();
     Set<String> nullableSymbols;
-
+    
     Map<String, Set<String>> inverseUnitGraph = new HashMap<>();
     Map<String, Set<String>> transitiveClosure = new  HashMap<>();
-
+    
     public BINConverter(Grammar grammar) {
         grammar = breakDownProductions(grammar);
         this.terminals = grammar.terminals;
@@ -32,10 +32,6 @@ public class BINConverter {
 
         buildInverseUnitGraph();
         buildTransitiveClosure();
-        System.out.println("--------------");
-        System.out.println(inverseUnitGraph);
-        System.out.println(transitiveClosure);
-        System.out.println();
     }
 
      // Método para construir o grafo unitário inverso
