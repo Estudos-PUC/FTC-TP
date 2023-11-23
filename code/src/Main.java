@@ -17,8 +17,7 @@ public class Main {
         BINConverter binConverter = new BINConverter(allGrammars.grammars.get(0).clone());
         binConverter.printGrammar();
         binConverter.printNullable();
-        binConverter.printRelation("Relação Unitária", binConverter.unitRelation);
-        binConverter.printRelation("Relação Unitária Inversa", binConverter.inverseUnitRelation);
+
 
 
         List<String> w = Arrays.asList( "(","a", ")");

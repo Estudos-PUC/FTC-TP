@@ -1,4 +1,3 @@
-import java.util.AbstractMap;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,9 +16,9 @@ public class BINConverter {
     List<String> allSymbols = new ArrayList<>();
     Map<String, List<List<String>>> R = new HashMap<>();
     Set<String> nullableSymbols;
-    Map<String, Set<String>> unitRelation;
-    Map<String, Set<String>> inverseUnitRelation;
 
+    Map<String, Set<String>> inverseUnitGraph = new HashMap<>();
+    Map<String, Set<String>> transitiveClosure = new  HashMap<>();
 
     public BINConverter(Grammar grammar) {
         grammar = breakDownProductions(grammar);
@@ -30,9 +29,66 @@ public class BINConverter {
         this.R = splitRules(grammar);
         variableIndex = grammar.variableIndex;
         this.nullableSymbols = Nullable();
+
+        buildInverseUnitGraph();
+        buildTransitiveClosure();
+        System.out.println("--------------");
+        System.out.println(inverseUnitGraph);
+        System.out.println(transitiveClosure);
         System.out.println();
-        constructUnitRelations();
     }
+
+     // Método para construir o grafo unitário inverso
+     private void buildInverseUnitGraph() {
+        // Adicionar todos os símbolos como vértices do grafo
+        for (String symbol : allSymbols) {
+            inverseUnitGraph.put(symbol, new HashSet<>());
+        }
+
+        // Para cada regra, adicionar as arestas correspondentes ao grafo
+        for (Map.Entry<String, List<List<String>>> entry : R.entrySet()) {
+            String lhs = entry.getKey(); // Não-terminal da esquerda
+            for (List<String> rule : entry.getValue()) {
+                if (rule.size() == 1) {
+                    // Para regras A → y
+                    inverseUnitGraph.get(rule.get(0)).add(lhs);
+                } else if (rule.size() == 2) {
+                    // Para regras A → By e A → yB onde B é anulável
+                    if (nullableSymbols.contains(rule.get(0))) {
+                        inverseUnitGraph.get(rule.get(1)).add(lhs);
+                    }
+                    if (nullableSymbols.contains(rule.get(1))) {
+                        inverseUnitGraph.get(rule.get(0)).add(lhs);
+                    }
+                }
+            }
+        }
+    }
+
+    // Método para calcular o fechamento transitivo usando o grafo unitário inverso
+    private void buildTransitiveClosure() {
+        for (String symbol : allSymbols) {
+            transitiveClosure.put(symbol, new HashSet<>());
+        }
+
+        // Para cada símbolo, executar uma busca em profundidade para encontrar o fechamento
+        for (String symbol : allSymbols) {
+            Set<String> visited = new HashSet<>();
+            dfs(symbol, visited);
+            transitiveClosure.get(symbol).addAll(visited);
+        }
+    }
+
+    // Método auxiliar de busca em profundidade para calcular o fechamento transitivo
+    private void dfs(String symbol, Set<String> visited) {
+        if (!visited.contains(symbol)) {
+            visited.add(symbol);
+            for (String adjacentSymbol : inverseUnitGraph.get(symbol)) {
+                dfs(adjacentSymbol, visited);
+            }
+        }
+    }
+
 
     public void printGrammar() {
 
