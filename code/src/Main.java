@@ -1,43 +1,59 @@
 import Gramatica.ALLGrammars;
+import Gramatica.Grammar;
 import CYK_Mod.*;
 import CYK_normal.CNFConverter;
 import CYK_normal.*;
+
 public class Main {
     public static void main(String[] args) throws Exception {
-        boolean flag = false;
+
         /*
          * Ler gramaticas do arquivo txt e inserir em um Array de gramaticas
          */
         ALLGrammars allGrammars = new ALLGrammars();
 
-        //Alterar o caminho se necessario
+        // Alterar o caminho se necessario
         String path = "code/model/GLC.txt";
         allGrammars.loadGrammar(path);
 
         try {
             allGrammars.loadGrammar(path);
-            flag = true;
         } catch (Exception e) {
-            flag = false;
             System.out.println("Erro na leitura");
         }
+        for (Grammar tmp : allGrammars.grammars) {
+            	
+            System.out.println("Gramatica:");
+            System.out.println(tmp.productions);
+            System.out.println("-----------------------------");
+            /*
+             * Converter gramatica para a forma CNF
+             */
+            CNFConverter cnf = new CNFConverter(tmp.clone());
 
-        /*
-         * Converter gramatica para a forma CNF
-         */
-        CNFConverter cnf = new CNFConverter(allGrammars.grammars.get(0).clone());
+            /*
+             * Chamada do cyk normal e do cyk modificado
+             */
+            CYK cyk = new CYK(cnf.g);
+            CYKModified cykModified = new CYKModified(tmp.clone());
 
-        /*
-         * Chamada do cyk normal
-         */
-        CYK cyk = new CYK(cnf.g);
-        cyk.cykParse("(b0+b)*a0");
+            /*
+             * Testes de gramatica
+             */
+            for (String tmpWord : tmp.word) {
+                System.out.println(tmpWord);
+                System.out.print("cyk Normal: ");
+                cyk.cykParse(tmpWord + "\n");
+                try {
+                    System.out.print("cyk Modificado: ");
+                    System.out.println(cykModified.runCYKAlgorithm(tmpWord) + "\n");
+                } catch (Exception e) {
+                    System.out.println(false + "\n");
+                }
+                System.out.println("-----------------------------");
+            }
 
-        /*
-         * Chamada do cyk modificado
-         */
-        CYKModified cykModified = new CYKModified(allGrammars.grammars.get(0).clone());
-        System.out.println(cykModified.runCYKAlgorithm("(b0+b)*a0"));
+        }
 
         // System.out.println(cnf.g.productions);
         // System.out.println("----------------------------------------------------------------");

@@ -68,6 +68,7 @@ public class CYK {
         for (int i = 0; i < word.length(); i++) {
             w.add("" + word.charAt(i));
         }
+        w.remove(w.size()-1);
         int n = w.size();
 
         // Initialize the table
