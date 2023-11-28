@@ -7,15 +7,6 @@ F aI bI (E)
 I 0I 1I /
 #
 (b0+b)*a0
-(b0+b)*a0
-(b0+b)*a0
-(b0+b)*a0
-(b0+b)*a0
-(b0+b)*a0
-(b0+b)*a0
-(b0+b)*a0
-(b0+b)*a0
-(b0+b)*a0
 #
 variables: E,T,F,I
 terminals: a,b,0,1,(,),+,*
@@ -34,6 +25,135 @@ E T E+T
 T F T*F
 F aI bI (E)
 I 0I 1I /
+#
+(b0+b)*a0
+#
+variables: S,Z,A
+terminals: 0,1
+start: S
+Regras
+S Z1Z1Z1A
+Z Z0 /
+A A0 A1 /
+#
+(b0+b)*a0
+#
+variables: S
+terminals: 0,1
+start: S
+Regras
+S 0 1 0S0 0S1 1S0 1S1
+#
+(b0+b)*a0
+#
+variables: S,A,C,D,E
+terminals: a,b,c
+start: S
+Regras
+S DC AE
+A Aa /
+C Cc /
+D aDb /
+E bEc /
+#
+(b0+b)*a0
+#
+variables: S,A,B,C,D,E,F
+terminals: a,b,c,d
+start: S
+Regras
+S AED F
+A Aa a
+B Bb b
+C Cc c
+D Dd d
+E bEc bc
+F aFd BC
+#
+(b0+b)*a0
+#
+variables: P,A,B
+terminals: a,b
+start: P
+Regras
+P BPA A
+A aA /
+B Bba /
+#
+(b0+b)*a0
+#
+variables: P,A,B
+terminals: a,b
+start: P
+Regras
+P APB /
+A aAb /
+B bBa ba
+#
+(b0+b)*a0
+#
+variables: P,A
+terminals: a,b
+start: P
+Regras
+P aPa bPb aAb
+A aA Ab /
+#
+(b0+b)*a0
+#
+variables: A,B,C,D,E,F
+terminals: 0,1
+start: A
+Regras
+A ABC AEF BD
+B B0 0
+C 0C EB
+D 1D 1
+E BE
+F 1F1 1
+#
+(b0+b)*a0
+#
+variables: P,A,B,C
+terminals: a,b,c
+start: P
+Regras
+P APB C
+A AaaA /
+B BBb C
+C cC /
+#
+(b0+b)*a0
+#
+variables: A,B,C,D
+terminals: b,c,d
+start: A
+Regras
+A CB
+B BBD b
+C BBC Dc
+D AD d
+#
+(b0+b)*a0
+#
+variables: P,A,B
+terminals: a,b,c
+start: P
+Regras
+P AB
+A aAb c
+B bBc a
+#
+(b0+b)*a0
+#
+variables: P,A,B,C
+terminals: a,b,c
+start: P
+Regras
+P A BC
+A B C
+B bB b
+C cC c
 #
 (b0+b)*a0
 #
