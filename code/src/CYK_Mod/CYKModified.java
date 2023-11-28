@@ -61,6 +61,7 @@ public class CYKModified {
 
         // Se o símbolo de início da gramática está no conjunto que deriva a palavra
         // inteira, aceite a palavra
-        return T.get(1).get(n).contains("E");
+        return T.get(1).get(n).contains(startSymbol);
+
     }
 }
