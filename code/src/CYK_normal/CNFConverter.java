@@ -21,7 +21,7 @@ public class CNFConverter {
         createNewStartSymbol(grammar);
         System.out.println("GRAMATICA APOS A CRIACAO DE NOVO SIMBOLO DE PARTIDA: ");
         grammar.printGrammar();
-        
+
         grammar = removeLambdaRules(grammar);
         System.out.println("GRAMATICA APOS A REMOCAO DE LAMBDA: ");
         grammar.printGrammar();
@@ -233,6 +233,7 @@ public class CNFConverter {
     // ------------------------ FIM ELIMINACAO DE REGRAS UNITARIAS------------------------------ //
 
     // ------------------------ TRATAR TERMINAIS ----------------------------------------------------
+    // abc
 
     // substituir variaveis terminais que não são producoes unitarias e criar novas regras  
     public static void productionsWithTwoOrMoreSymbols(Grammar g) {
