@@ -15,18 +15,60 @@ public class CNFConverter {
     public Grammar g;
 
     public CNFConverter(Grammar grammar){
+        System.out.println("GRAMATICA INICIAL: ");
+        grammar.printGrammar();
+
+        createNewStartSymbol(grammar);
+        System.out.println("GRAMATICA APOS A CRIACAO DE NOVO SIMBOLO DE PARTIDA: ");
+        grammar.printGrammar();
+        
         grammar = removeLambdaRules(grammar);
+        System.out.println("GRAMATICA APOS A REMOCAO DE LAMBDA: ");
+        grammar.printGrammar();
+        
         grammar = removeUnitaryRules(grammar);
+        System.out.println("GRAMATICA APOS A REMOCAO DE REGRAS UNITARIAS: ");
+        grammar.printGrammar();
+        
         productionsWithTwoOrMoreSymbols(grammar);
+        System.out.println("GRAMATICA APOS A MOD: ");
+        grammar.printGrammar();
+
         breakDownProductions(grammar);
         this.g = grammar ;
+        System.out.println("GRAMATICA NA CNF: ");
+        grammar.printGrammar();
     }
     private static void addProductions(Map<String, Set<String>> productions, String variable, Set<String> newRules) {
         productions.put(variable, newRules);
     }
 
-    // ----------------------------- REMOCAO DE REGRAS LAMBDA --------------------------=========
+    public static void createNewStartSymbol(Grammar g) {
+        // Verifique se o símbolo de início ocorre no lado direito de alguma regra
+        boolean isStartSymbolOnRightSide = g.productions.values().stream()
+                .anyMatch(rules -> rules.stream().anyMatch(rule -> rule.contains(g.startSymbol)));
+    
+        if (isStartSymbolOnRightSide) {
+            // Crie um novo símbolo de início que não está em V
+            String newStartSymbol = g.getNextVariableName();
+    
+            // Adicione o novo símbolo de início a V'
+            g.variables.add(newStartSymbol);
+    
+            // Adicione a regra P' → P em R'
+            Set<String> newStartRules = new HashSet<>();
+            newStartRules.add(g.startSymbol);
+            g.productions.put(newStartSymbol, newStartRules);
+    
+            // Atualize o símbolo de início da gramática para o novo símbolo
+            g.startSymbol = newStartSymbol;
+        }
+        // Se o símbolo de início não ocorrer do lado direito, nenhuma ação é necessária
+    }
+    
+    
 
+    // ----------------------------- REMOCAO DE REGRAS LAMBDA --------------------------=========
     // Método para remover regras lambda
     public static Grammar removeLambdaRules(Grammar g) {
         // Encontrar variáveis anuláveis
@@ -271,7 +313,6 @@ public class CNFConverter {
     }
 
     // ------------------------ FIM  TRATAR TERMINAIS ------------------------------ //
-
 
     private static void breakDownProductions(Grammar grammar) {
         Map<String, String> symbolToVariableMap = new HashMap<>();
