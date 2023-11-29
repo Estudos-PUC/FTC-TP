@@ -1,0 +1,8 @@
+variables: S
+terminals: 0,1
+start: S
+Regras
+S 0 1 0S0 0S1 1S0 1S1
+#
+1
+#
