@@ -13,7 +13,7 @@ public class Main {
         ALLGrammars allGrammars = new ALLGrammars();
 
         // Alterar o caminho se necessario
-        String path = "code/model/GLC.txt";
+        String path = "code/model/teste.txt";
         allGrammars.loadGrammar(path);
 
         try {

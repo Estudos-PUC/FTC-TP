@@ -95,7 +95,7 @@ public class CNFConverter {
             addProductions(newProductions, variable, newRules);
         }
 
-        return new Grammar(g.variables, g.terminals, newProductions, g.startSymbol, g.word);
+        return g;
     }
 
     // Método para encontrar variáveis anuláveis
@@ -195,7 +195,7 @@ public class CNFConverter {
         }
 
         // Retorna a nova gramática com o conjunto de produções atualizado
-        return new Grammar(g.variables, g.terminals, newProductions, g.startSymbol, g.word);
+        return g;
     }
 
     // Método para encontrar variáveis encadeadas
@@ -245,7 +245,6 @@ public class CNFConverter {
         for (Map.Entry<String, Set<String>> entry : g.productions.entrySet()) {
             String variable = entry.getKey();
             Set<String> rules = entry.getValue();
-
             for (String production : rules) {
                 String productionWithoutSpaces = production.replaceAll("\\s+", "");
                 if (productionWithoutSpaces.length() >= 2) {
