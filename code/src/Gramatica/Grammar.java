@@ -50,6 +50,7 @@ public class Grammar implements Cloneable {
             System.out.println("  " + variable + " -> " + rules);
         }
     }
+    
     @Override
     public Grammar clone() {
         try {

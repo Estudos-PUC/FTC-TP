@@ -1,10 +1,11 @@
-variables: E,T,F,I
-terminals: a,b,0,1,(,),+,*
-start: E
-E T E+T
-T F T*F
-F aI bI (E)
-I 0 1
+variables: A,B,C,D
+terminals: b,c,d
+start: A
+Regras
+A CB
+B BBD b
+C BBC Dc
+D AD d
 #
-a0
+dcb
 #
