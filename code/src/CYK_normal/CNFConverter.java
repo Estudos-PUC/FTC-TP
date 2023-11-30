@@ -19,25 +19,25 @@ public class CNFConverter {
         grammar.printGrammar();
 
         createNewStartSymbol(grammar);
-        System.out.println("GRAMATICA APOS A CRIACAO DE NOVO SIMBOLO DE PARTIDA: ");
-        grammar.printGrammar();
+        //System.out.println("GRAMATICA APOS A CRIACAO DE NOVO SIMBOLO DE PARTIDA: ");
+        //grammar.printGrammar();
 
         grammar = removeLambdaRules(grammar);
         System.out.println("GRAMATICA APOS A REMOCAO DE LAMBDA: ");
         grammar.printGrammar();
         
         grammar = removeUnitaryRules(grammar);
-        System.out.println("GRAMATICA APOS A REMOCAO DE REGRAS UNITARIAS: ");
-        grammar.printGrammar();
+        //System.out.println("GRAMATICA APOS A REMOCAO DE REGRAS UNITARIAS: ");
+        //grammar.printGrammar();
         
         productionsWithTwoOrMoreSymbols(grammar);
-        System.out.println("GRAMATICA APOS A MOD: ");
-        grammar.printGrammar();
+        // System.out.println("GRAMATICA APOS A MOD: ");
+        // grammar.printGrammar();
 
-        breakDownProductions(grammar);
+        grammar = breakDownProductions(grammar);
         this.g = grammar ;
-        System.out.println("GRAMATICA NA CNF: ");
-        grammar.printGrammar();
+        //System.out.println("GRAMATICA NA CNF: ");
+        //grammar.printGrammar();
     }
     private static void addProductions(Map<String, Set<String>> productions, String variable, Set<String> newRules) {
         productions.put(variable, newRules);
@@ -164,39 +164,30 @@ public class CNFConverter {
     // ------------------------ ELIMINACAO DE REGRAS UNITARIAS -------------------------------- //
     // Método para eliminar regras unitárias
     public static Grammar removeUnitaryRules(Grammar g) {
-        // Novo conjunto de produções sem regras unitárias
-        Map<String, Set<String>> newProductions = new HashMap<>();
-
-        // Para cada variável X em V, faça
+        Map<String, Set<String>> newProductions = new HashMap<>(); // Novo conjunto de produções R'
+    
         for (String X : g.variables) {
-            // Inicializa um conjunto temporário para armazenar as novas produções de X
-            Set<String> newRulesForX = new HashSet<>();
-
-            // Encontra todas as variáveis encadeadas a X
-            Set<String> chainedVariables = findChainedVariables(g, X);
-
-            // Para cada variável Y em enc(X), verifique as produções Y -> w em R
+            Set<String> newRulesForX = new HashSet<>(); // Novas regras para X
+            Set<String> chainedVariables = findChainedVariables(g, X); // Encadeadas para X
+    
             for (String Y : chainedVariables) {
-                // Assegura que Y tem produções associadas a ela antes de prosseguir
                 if (g.productions.containsKey(Y)) {
                     for (String w : g.productions.get(Y)) {
-                        // Se w não é uma variável, ou seja, é um terminal ou uma cadeia de terminais e
-                        // variáveis
-                        if (!g.variables.contains(w)) {
-                            // Adiciona a produção X -> w em R'
-                            newRulesForX.add(w);
+                        // Verifica se w é composto apenas por terminais ou por uma combinação de terminais e variáveis,
+                        // mas não uma única variável que é uma regra unitária
+                        if (!(w.length() == 1 && g.variables.contains(w))) {
+                            newRulesForX.add(w); // Adiciona a produção não unitária
                         }
                     }
                 }
             }
-
-            // Atualiza o conjunto de produções R' para a variável X
-            addProductions(newProductions, X, newRulesForX);
+            addProductions(newProductions, X, newRulesForX); // Adiciona novas regras para X em R'
         }
-
-        // Retorna a nova gramática com o conjunto de produções atualizado
-        return g;
+        
+        g.productions = newProductions; // Atualiza a gramática com R'
+        return g; // Retorna a gramática atualizada
     }
+    
 
     // Método para encontrar variáveis encadeadas
     public static Set<String> findChainedVariables(Grammar g, String startVariable) {
@@ -226,7 +217,6 @@ public class CNFConverter {
         }
 
         // Retornar o conjunto de variáveis encadeadas
-
         return U;
     }
 
@@ -236,7 +226,7 @@ public class CNFConverter {
     // abc
 
     // substituir variaveis terminais que não são producoes unitarias e criar novas regras  
-    public  void productionsWithTwoOrMoreSymbols(Grammar g) {
+    public static void productionsWithTwoOrMoreSymbols(Grammar g) {
         Map<String, Set<String>> productionsWithTwoOrMoreSymbols = new HashMap<>();
         Map<String, String> newVariablesForTerminals = new HashMap<>(); // Guarda as novas variáveis para terminais
         Map<String, String> substitutions = new HashMap<>(); // Armazena as substituições a serem realizadas
@@ -279,10 +269,9 @@ public class CNFConverter {
 
         // Substituições e adição de novas variáveis
         performSubstitutionsAndAddNewVariables(g, newVariablesForTerminals, substitutions);
-        System.out.println();
     }
 
-    private  void performSubstitutionsAndAddNewVariables(Grammar g, Map<String, String> newVariables, Map<String, String> substitutions) {
+    private static void performSubstitutionsAndAddNewVariables(Grammar g, Map<String, String> newVariables, Map<String, String> substitutions) {
         // Aplica substituições
         for (Map.Entry<String, Set<String>> entry : g.productions.entrySet()) {
             String variable = entry.getKey();
@@ -300,8 +289,6 @@ public class CNFConverter {
                 }
             }
             addProductions(g.productions, variable, newRules);
-            System.out.println(g.productions);
-            System.out.println();
         }
 
         // Adiciona novas variáveis e regras à gramática
@@ -317,7 +304,7 @@ public class CNFConverter {
 
     // ------------------------ FIM  TRATAR TERMINAIS ------------------------------ //
 
-    private static void breakDownProductions(Grammar grammar) {
+private Grammar breakDownProductions(Grammar grammar) {
         Map<String, String> symbolToVariableMap = new HashMap<>();
         Map<String, Set<String>> newProductions = new HashMap<>();
         List<String> allSymbols = new ArrayList<>();
@@ -334,7 +321,7 @@ public class CNFConverter {
                     String currentVariable = variable;
                     for (int i = 0; i < symbols.size() - 2; i++) {
                         String nextSymbol = symbols.get(i + 1);
-                        String newVariable = grammar.getNextVariableName();
+                        String newVariable = symbolToVariableMap.getOrDefault(nextSymbol, grammar.getNextVariableName());
                         symbolToVariableMap.putIfAbsent(nextSymbol, newVariable);
 
                         Set<String> currentRules = newProductions.computeIfAbsent(currentVariable, k -> new HashSet<>());
@@ -361,6 +348,7 @@ public class CNFConverter {
 
         // Update the grammar's variables with the new variables
         grammar.variables.addAll(symbolToVariableMap.values());
+        return grammar;
     }
 
 
