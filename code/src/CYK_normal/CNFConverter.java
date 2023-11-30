@@ -236,7 +236,7 @@ public class CNFConverter {
     // abc
 
     // substituir variaveis terminais que não são producoes unitarias e criar novas regras  
-    public static void productionsWithTwoOrMoreSymbols(Grammar g) {
+    public  void productionsWithTwoOrMoreSymbols(Grammar g) {
         Map<String, Set<String>> productionsWithTwoOrMoreSymbols = new HashMap<>();
         Map<String, String> newVariablesForTerminals = new HashMap<>(); // Guarda as novas variáveis para terminais
         Map<String, String> substitutions = new HashMap<>(); // Armazena as substituições a serem realizadas
@@ -279,9 +279,10 @@ public class CNFConverter {
 
         // Substituições e adição de novas variáveis
         performSubstitutionsAndAddNewVariables(g, newVariablesForTerminals, substitutions);
+        System.out.println();
     }
 
-    private static void performSubstitutionsAndAddNewVariables(Grammar g, Map<String, String> newVariables, Map<String, String> substitutions) {
+    private  void performSubstitutionsAndAddNewVariables(Grammar g, Map<String, String> newVariables, Map<String, String> substitutions) {
         // Aplica substituições
         for (Map.Entry<String, Set<String>> entry : g.productions.entrySet()) {
             String variable = entry.getKey();
@@ -299,6 +300,8 @@ public class CNFConverter {
                 }
             }
             addProductions(g.productions, variable, newRules);
+            System.out.println(g.productions);
+            System.out.println();
         }
 
         // Adiciona novas variáveis e regras à gramática
@@ -331,7 +334,7 @@ public class CNFConverter {
                     String currentVariable = variable;
                     for (int i = 0; i < symbols.size() - 2; i++) {
                         String nextSymbol = symbols.get(i + 1);
-                        String newVariable = symbolToVariableMap.getOrDefault(nextSymbol, grammar.getNextVariableName());
+                        String newVariable = grammar.getNextVariableName();
                         symbolToVariableMap.putIfAbsent(nextSymbol, newVariable);
 
                         Set<String> currentRules = newProductions.computeIfAbsent(currentVariable, k -> new HashSet<>());

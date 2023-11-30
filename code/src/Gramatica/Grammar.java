@@ -27,13 +27,14 @@ public class Grammar implements Cloneable {
     }
 
     public String getNextVariableName() {
-        if (variableIndex >= 26 * 101) { // Checa se excedeu o limite de Z100
+        if (variableIndex >= 26 * 26) { // Checa se excedeu o limite de ZZ
             throw new IllegalStateException("Excedido o número máximo de variáveis.");
         }
-        int quotient = variableIndex / 101; // Calcula qual letra usar (0 para A, 1 para B, etc.)
-        int remainder = variableIndex % 101; // Calcula o número (0 a 100)
-        char nextChar = (char) ('A' + quotient);
-        String nextVariable = nextChar + String.format("%02d", remainder);
+        int quotient = variableIndex / 26; // Calcula a primeira letra (0 para A, 1 para B, etc.)
+        int remainder = variableIndex % 26; // Calcula a segunda letra (0 para A, 1 para B, etc.)
+        char firstChar = (char) ('A' + quotient);
+        char secondChar = (char) ('A' + remainder);
+        String nextVariable = "" + firstChar + secondChar;
         variableIndex++; // Incrementa o índice para a próxima variável
         return nextVariable;
     }

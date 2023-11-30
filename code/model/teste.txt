@@ -8,6 +8,15 @@ S 0 1 0S0 0S1 1S0 1S1
 0
 0000
 1111
-122
-111
+1223
+#
+variables: S
+terminals: a,b
+start: S
+Regras
+S a b aSa aSb bSa bSb
+#
+a
+b
+c
 #
