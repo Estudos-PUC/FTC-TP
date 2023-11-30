@@ -1,22 +1,9 @@
-variables: S
-terminals: 0,1
-start: S
-Regras
-S 0 1 0S0 0S1 1S0 1S1
+variables: E,T,F
+terminals: (,),a
+start: E
+E E+T T
+T T*F F
+F (E) t
 #
-1
-0
-0000
-1111
-1223
-#
-variables: S
-terminals: a,b
-start: S
-Regras
-S a b aSa aSb bSa bSb
-#
-a
-b
-c
+t
 #
