@@ -1,7 +1,6 @@
 package CYK_normal;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -13,15 +12,68 @@ import java.util.regex.Pattern;
 import Gramatica.Grammar;
 
 public class CNFConverter {
-    public Grammar g;
+    Set<String> terminals;
+    Set<String> non_terminal;
+    List<String> allSymbols = new ArrayList<>();
+    Map<String, List<List<String>>> R = new HashMap<>();
 
     public CNFConverter(Grammar grammar) {
-        System.out.println("GRAMATICA INICIAL: ");
-        grammar.printGrammar();
+        this.terminals = grammar.terminals;
+        this.non_terminal = grammar.variables;
+        this.allSymbols.addAll(terminals);
+        this.allSymbols.addAll(non_terminal);
+        this.R = splitRules(grammar);
 
+        /*
+         * Alterar a estrutura do createNewStartSymbol lembrando que agora R representa
+         * g.productions e que tem essa estrutura:
+         * (Novo) Map<String, List<List<String>>> que é =! de Map<String, Set<String>>
+         * (antigo)
+         */
         createNewStartSymbol(grammar);
         // System.out.println("GRAMATICA APOS A CRIACAO DE NOVO SIMBOLO DE PARTIDA: ");
         // grammar.printGrammar();
+    }
+
+    public Map<String, List<List<String>>> splitRules(Grammar grammar) {
+        Map<String, List<List<String>>> tmp = new HashMap<>();
+
+        for (Map.Entry<String, Set<String>> entry : grammar.productions.entrySet()) {
+            String variable = entry.getKey();
+            Set<String> rules = entry.getValue();
+            List<List<String>> convertRules = new ArrayList<>();
+            List<String> symbols = new ArrayList<>();
+            for (String rule : rules) {
+                symbols = splitSymbols(allSymbols, rule);
+                convertRules.add(symbols);
+            }
+            tmp.put(variable, convertRules);
+        }
+        return tmp;
+    }
+
+    public List<String> splitSymbols(List<String> allSymbols, String input) {
+        // Ordenar os símbolos pelo comprimento em ordem decrescente
+
+        allSymbols.sort((a, b) -> b.length() - a.length());
+
+        // Criar uma expressão regular que combina com qualquer um dos símbolos
+        StringBuilder regex = new StringBuilder();
+        for (String symbol : allSymbols) {
+            if (regex.length() > 0) {
+                regex.append("|");
+            }
+            regex.append(Pattern.quote(symbol));
+        }
+
+        // Encontrar correspondências na string de entrada
+        Matcher matcher = Pattern.compile(regex.toString()).matcher(input);
+        List<String> splitSymbols = new ArrayList<>();
+        while (matcher.find()) {
+            splitSymbols.add(matcher.group());
+        }
+
+        return splitSymbols;
     }
 
     // 1. CRIAR NOVO SIMBOLO INICIAL ------------------------------
@@ -50,28 +102,26 @@ public class CNFConverter {
 
     // --------------------------------------------------------------------
 
-
-
-
     // 2. ELIMINAR REGRAS LAMBDA ------------------------------
     // --------------------------------------------------------------------
 
-
-
-    
-    // 3. ELIMINAR REGRAS UNITARIAS 
+    // 3. ELIMINAR REGRAS UNITARIAS
     // --------------------------------------------------------------------
 
-
-
-    // 3. GERAR NOVAS REGRAS E APLICAR SUBSTITUICOES PARA REGRAS DE TAMANHO MAIOR QUE 2
+    // 3. GERAR NOVAS REGRAS E APLICAR SUBSTITUICOES PARA REGRAS DE TAMANHO MAIOR
+    // QUE 2
     // --------------------------------------------------------------------
 
+    // 4. QUEBRA DE REGRAS ------------------------------
 
-
-    // 4. QUEBRA DE REGRAS  ------------------------------
-
-    private Grammar breakDownProductions(Grammar grammar) {
+    /*
+     * Alterar a estrutura do breakDownProductions lembrando que agora R representa
+     * g.productions e que tem essa estrutura:
+     * (Novo) Map<String, List<List<String>>> que é =! de Map<String, Set<String>> (antigo)
+     * 
+     * lembrando de tirar o Grammar e o return porque agora voce tem variaveis criadas no construtor
+     */
+    private Grammar /* remover return*/ breakDownProductions(Grammar grammar) /* remover parametro*/ {
         Map<String, String> symbolToVariableMap = new HashMap<>();
         Map<String, Set<String>> newProductions = new HashMap<>();
         List<String> allSymbols = new ArrayList<>();
@@ -93,56 +143,33 @@ public class CNFConverter {
                         symbolToVariableMap.putIfAbsent(nextSymbol, newVariable);
 
                         Set<String> currentRules = newProductions.computeIfAbsent(currentVariable,
-                                k -> new HashSet<>());
+                                k -> new HashSet<>());/*alterar */
                         currentRules.add(symbols.get(i) + newVariable);
 
                         currentVariable = newVariable;
                     }
                     // Add the final rule which will have exactly two symbols
                     newProductions.computeIfAbsent(currentVariable, k -> new HashSet<>())
-                            .add(symbols.get(symbols.size() - 2) + symbols.get(symbols.size() - 1));
+                            .add(symbols.get(symbols.size() - 2) + symbols.get(symbols.size() - 1));/*alterar */
                 } else {
                     // Rule already has two or fewer symbols, so we simply add it to the new
                     // productions
-                    newProductions.computeIfAbsent(variable, k -> new HashSet<>()).add(rule);
+                    newProductions.computeIfAbsent(variable, k -> new HashSet<>()).add(rule);/*alterar */
                 }
             }
         }
 
         // Update the grammar's productions with the new productions, eliminating any
         // duplicates
-        for (Map.Entry<String, Set<String>> entry : newProductions.entrySet()) {
+        for (Map.Entry<String, Set<String>> entry : newProductions.entrySet()) /*alterar */{
             String variable = entry.getKey();
             Set<String> newRules = entry.getValue();
-            grammar.productions.put(variable, newRules);
+            grammar.productions.put(variable, newRules);/*alterar */
         }
 
         // Update the grammar's variables with the new variables
         grammar.variables.addAll(symbolToVariableMap.values());
-        return grammar;
+        return grammar; /*remover return */
     }
 
-    public static List<String> splitSymbols(List<String> allSymbols, String input) {
-        // Ordenar os símbolos pelo comprimento em ordem decrescente
-
-        allSymbols.sort((a, b) -> b.length() - a.length());
-
-        // Criar uma expressão regular que combina com qualquer um dos símbolos
-        StringBuilder regex = new StringBuilder();
-        for (String symbol : allSymbols) {
-            if (regex.length() > 0) {
-                regex.append("|");
-            }
-            regex.append(Pattern.quote(symbol));
-        }
-
-        // Encontrar correspondências na string de entrada
-        Matcher matcher = Pattern.compile(regex.toString()).matcher(input);
-        List<String> splitSymbols = new ArrayList<>();
-        while (matcher.find()) {
-            splitSymbols.add(matcher.group());
-        }
-
-        return splitSymbols;
-    }
 }
