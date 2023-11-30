@@ -1,9 +1,10 @@
-variables: E,T,F
-terminals: (,),a
+variables: E,T,F,I
+terminals: a,b,0,1,(,),+,*
 start: E
-E E+T T
-T T*F F
-F (E) t
+E T E+T
+T F T*F
+F aI bI (E)
+I 0 1
 #
-t
+a0
 #
