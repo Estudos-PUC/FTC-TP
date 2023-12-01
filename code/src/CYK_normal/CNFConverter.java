@@ -34,6 +34,7 @@ public class CNFConverter {
         System.out.println("Nullable: " + findNullableVariables());
         removeLambdaRules();
         System.out.println("Encadeadas: " + findChainedVariables());
+        removeLambdaRules();
         printFormattedGrammar();
         removeUnitaryRules();
         printFormattedGrammar();
@@ -400,6 +401,46 @@ public class CNFConverter {
     // QUE 2
     // --------------------------------------------------------------------
 
+    private void removeLambdaRules() {
+        Set<String> nullableVariables = findNullableVariables(); // Usa o método já implementado para encontrar variáveis anuláveis
+        Map<String, List<List<String>>> newRules = new HashMap<>(); // R'
+    
+        // Para cada regra existente, gerar novas regras omitindo as variáveis anuláveis
+        for (Map.Entry<String, List<List<String>>> entry : rules.entrySet()) {
+            String variable = entry.getKey();
+            List<List<String>> productions = entry.getValue();
+    
+            // Adicionar todas as regras existentes que não são lambda
+            List<List<String>> newProductions = new ArrayList<>();
+            for (List<String> production : productions) {
+                if (!production.isEmpty()) {
+                    newProductions.add(new ArrayList<>(production));
+                }
+            }
+    
+            // Adicionar novas regras para cada combinação de variáveis anuláveis
+            for (List<String> production : productions) {
+                // Criar todas as combinações possíveis onde as variáveis anuláveis são omitidas
+                List<String> combination = new ArrayList<>(production);
+                combination.removeIf(nullableVariables::contains); // Remove variáveis anuláveis
+    
+                if (!combination.isEmpty() && !newProductions.contains(combination)) {
+                    newProductions.add(combination);
+                }
+            }
+    
+            newRules.put(variable, newProductions);
+        }
+    
+        // Para lidar com o caso especial do símbolo inicial
+        if (nullableVariables.contains(startSymbol)) {
+            List<String> lambdaProduction = new ArrayList<>();
+            newRules.get(startSymbol).add(lambdaProduction);
+        }
+    
+        // Atualiza o conjunto de regras de produção da classe
+        rules = newRules;
+    }
     // 4. QUEBRA DE REGRAS ------------------------------
     private void breakDownProductions() {
         Map<String, String> symbolToVariableMap = new HashMap<>();
