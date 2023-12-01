@@ -26,30 +26,6 @@ public class Grammar implements Cloneable {
         this.word = word;
     }
 
-    public String getNextVariableName() {
-        if (variableIndex >= 26 * 26) { // Checa se excedeu o limite de ZZ
-            throw new IllegalStateException("Excedido o número máximo de variáveis.");
-        }
-        int quotient = variableIndex / 26; // Calcula a primeira letra (0 para A, 1 para B, etc.)
-        int remainder = variableIndex % 26; // Calcula a segunda letra (0 para A, 1 para B, etc.)
-        char firstChar = (char) ('A' + quotient);
-        char secondChar = (char) ('A' + remainder);
-        String nextVariable = "" + firstChar + secondChar;
-        variableIndex++; // Incrementa o índice para a próxima variável
-        return nextVariable;
-    }
-
-    public void printGrammar() {
-        System.out.println("Variáveis: " + this.variables);
-        System.out.println("Terminais: " + this.terminals);
-        System.out.println("Símbolo inicial: " + this.startSymbol);
-        System.out.println("Produções:");
-        for (Map.Entry<String, Set<String>> entry : this.productions.entrySet()) {
-            String variable = entry.getKey();
-            Set<String> rules = entry.getValue();
-            System.out.println("  " + variable + " -> " + rules);
-        }
-    }
     
     @Override
     public Grammar clone() {
@@ -61,10 +37,9 @@ public class Grammar implements Cloneable {
             for (Map.Entry<String, Set<String>> entry : this.productions.entrySet()) {
                 cloned.productions.put(entry.getKey(), new HashSet<>(entry.getValue()));
             }
-            // Não é necessário clonar startSymbol e variableIndex, pois são imutáveis ou primitivos
             return cloned;
         } catch (CloneNotSupportedException e) {
-            throw new AssertionError(); // Não deve acontecer, pois estamos implementando Cloneable
+            throw new AssertionError();
         }
     }
 }

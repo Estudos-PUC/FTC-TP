@@ -58,11 +58,5 @@ public class Main {
             }
 
         }
-
-        // System.out.println(cnf.g.productions);
-        // System.out.println("----------------------------------------------------------------");
-        // System.out.print(cnf.g.productions);
-        // System.out.println(allGrammars.grammars.get(0).productions);
-        // System.out.print("----------------------------------------------------------------");
     }
 }

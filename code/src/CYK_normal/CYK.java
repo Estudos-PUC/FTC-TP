@@ -3,11 +3,11 @@ import java.util.*;
 
 public class CYK {
 
-    // Non-terminals symbols
+
     Set<String> terminals;
     Set<String> non_terminal;
     List<String> allSymbols = new ArrayList<>();
-    // Rules of the grammar
+
     Map<String, List<List<String>>> R = new HashMap<>();
     String startSymbol;
     public CYK(CNFConverter grammar) {
@@ -20,7 +20,6 @@ public class CYK {
     }
 
 
-    // function to perform the CYK Algorithm
     public void cykParse(String word) {
         List<String> w = new ArrayList<>();
         for (int i = 0; i < word.length(); i++) {
@@ -29,20 +28,20 @@ public class CYK {
         w.remove(w.size()-1);
         int n = w.size();
 
-        // Initialize the table
+        // Inicializar a tabela
         Map<Integer, Map<Integer, Set<String>>> T = new HashMap<>();
 
-        // Filling in the table
+        // Preencher a tabela
         for (int j = 0; j < n; j++) {
 
-            // Iterate over the rules
+            // Iterar sobre as regras
             for (Map.Entry<String, List<List<String>>> x : R.entrySet()) {
                 String lhs = x.getKey();
                 List<List<String>> rule = x.getValue();
 
                 for (List<String> rhs : rule) {
 
-                    // If a terminal is found
+                    // Se encontrar um terminal
                     if (rhs.size() == 1
                             && rhs.get(0).equals(w.get(j))) {
                         if (T.get(j) == null)
@@ -56,16 +55,16 @@ public class CYK {
             }
             for (int i = j; i >= 0; i--) {
 
-                // Iterate over the range from i to j
+                // Iterar de i a j
                 for (int k = i; k <= j; k++) {
 
-                    // Iterate over the rules
+                    // Iterar sobre as regras
                     for (Map.Entry<String, List<List<String>>> x : R.entrySet()) {
                         String lhs = x.getKey();
                         List<List<String>> rule = x.getValue();
 
                         for (List<String> rhs : rule) {
-                            // If a terminal is found
+                            // Se encontrar um terminal
                             if (rhs.size() == 2
                                     && T.get(i) != null
                                     && T.get(i).get(k) != null
@@ -91,11 +90,10 @@ public class CYK {
             }
         }
 
-         // Supondo que CNFConverter tenha esse campo
         if (T.get(0) != null && T.get(0).get(n - 1) != null
                 && T.get(0).get(n - 1).contains(startSymbol))
-            System.out.println("True");
+            System.out.println("true");
         else
-            System.out.println("False");
+            System.out.println("false");
     }
 }

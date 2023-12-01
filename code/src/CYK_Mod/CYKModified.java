@@ -16,7 +16,7 @@ public class CYKModified {
 
     public boolean runCYKAlgorithm(String w) {
         int n = w.length();
-        // Usamos uma lista de listas de conjuntos para representar a tabela CYK
+        // lista de listas de conjuntos para representar a tabela CYK
         List<List<Set<String>>> T = new ArrayList<>();
 
         // Inicializa a tabela CYK
@@ -27,13 +27,13 @@ public class CYKModified {
             }
         }
 
-        // Preencha a diagonal principal da tabela CYK com fechamentos transitivos dos
+        // Preencher a diagonal principal da tabela CYK com fechamentos transitivos dos
         // caracteres
         for (int i = 1; i <= n; i++) {
             T.get(i).set(i, binGrammar.transitiveClosure.get(String.valueOf(w.charAt(i - 1))));
         }
 
-        // Construa o restante da tabela CYK
+        // Construir o restante da tabela CYK
         for (int length = 2; length <= n; length++) {
             for (int i = 1; i <= n - length + 1; i++) {
                 int j = i + length - 1;
@@ -49,7 +49,7 @@ public class CYKModified {
                             }
                         }
                     }
-                    // Após verificar todas as produções, feche T[i][j] sob o fechamento transitivo
+                    // Após verificar todas as produções, fechar T[i][j] sob o fechamento transitivo
                     Set<String> closure = new HashSet<>();
                     for (String symbol : T.get(i).get(j)) {
                         closure.addAll(binGrammar.transitiveClosure.getOrDefault(symbol, new HashSet<>()));
@@ -60,7 +60,7 @@ public class CYKModified {
         }
 
         // Se o símbolo de início da gramática está no conjunto que deriva a palavra
-        // inteira, aceite a palavra
+        // inteira, aceitar a palavra
         return T.get(1).get(n).contains(startSymbol);
 
     }

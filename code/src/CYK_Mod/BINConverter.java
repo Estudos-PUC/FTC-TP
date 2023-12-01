@@ -38,6 +38,19 @@ public class BINConverter {
         buildTransitiveClosure();
     }
 
+    public String getNextVariableName() {
+        if (variableIndex >= 26 * 26) { // Checa se excedeu o limite de ZZ
+            throw new IllegalStateException("Excedido o número máximo de variáveis.");
+        }
+        int quotient = variableIndex / 26; // Calcula a primeira letra (0 para A, 1 para B, etc.)
+        int remainder = variableIndex % 26; // Calcula a segunda letra (0 para A, 1 para B, etc.)
+        char firstChar = (char) ('A' + quotient);
+        char secondChar = (char) ('A' + remainder);
+        String nextVariable = "" + firstChar + secondChar;
+        variableIndex++; // Incrementa o índice para a próxima variável
+        return nextVariable;
+    }
+
      // Método para construir o grafo unitário inverso
      private void buildInverseUnitGraph() {
         // Adicionar todos os símbolos como vértices do grafo
@@ -151,7 +164,7 @@ public class BINConverter {
                     for (int i = 0; i < symbols.size() - 2; i++) {
                         String nextSymbol = symbols.get(i + 1);
                         String newVariable = symbolToVariableMap.getOrDefault(nextSymbol,
-                                grammar.getNextVariableName());
+                                getNextVariableName());
                         symbolToVariableMap.putIfAbsent(nextSymbol, newVariable);
 
                         Set<String> currentRules = newProductions.computeIfAbsent(currentVariable,

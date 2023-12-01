@@ -64,13 +64,11 @@ public class CNFConverter {
 
     public void printFormattedGrammar() {
         System.out.println("Variavel de Partida: " + startSymbol);
-        // Imprime o conjunto de variáveis
+
         System.out.println("Variáveis: " + non_terminal);
 
-        // Imprime o conjunto de símbolos terminais
         System.out.println("Terminais: " + terminals);
 
-        // Imprime as regras de produção
         System.out.println("Regras:");
         for (String variable : non_terminal) {
             // Obtém todas as produções para a variável atual
@@ -107,7 +105,6 @@ public class CNFConverter {
 
     public List<String> splitSymbols(List<String> allSymbols, String input) {
         // Ordenar os símbolos pelo comprimento em ordem decrescente
-
         allSymbols.sort((a, b) -> b.length() - a.length());
 
         // Criar uma expressão regular que combina com qualquer um dos símbolos
@@ -161,7 +158,7 @@ public class CNFConverter {
 
     // 2. ELIMINAR REGRAS LAMBDA ------------------------------
     private Set<String> findNullableVariables() {
-        Set<String> nullableVariables = new HashSet<>(); // VAg
+        Set<String> nullableVariables = new HashSet<>(); 
         boolean changed;
 
         do {
@@ -188,19 +185,19 @@ public class CNFConverter {
 
             // Atualiza o conjunto de variáveis anuláveis após verificar todas as variáveis
             nullableVariables = newNullableVariables;
-        } while (changed); // Continue até que não haja mais mudanças no conjunto de variáveis anuláveis
+        } while (changed); // Continuar até que não haja mais mudanças no conjunto de variáveis anuláveis
 
         return nullableVariables;
     }
 
     private void removeLambdaRules() {
-        // Etapa 1: Encontrar variáveis anuláveis
+        // Encontrar variáveis anuláveis
         Set<String> nullableVariables = findNullableVariables();
     
-        // Etapa 2: Inicializar um novo conjunto de regras sem regras lambda
+        // Inicializar um novo conjunto de regras sem regras lambda
         Map<String, List<List<String>>> newRules = new HashMap<>();
     
-        // Etapa 3: Iterar sobre as regras existentes e criar novas regras sem as variáveis anuláveis
+        // Iterar sobre as regras existentes e criar novas regras sem as variáveis anuláveis
         for (Map.Entry<String, List<List<String>>> entry : rules.entrySet()) {
             String variable = entry.getKey();
             List<List<String>> productions = entry.getValue();
@@ -226,12 +223,12 @@ public class CNFConverter {
             newRules.put(variable, newProductions);
         }
     
-        // Etapa 4: Atualizar as regras da gramática para remover as regras lambda
+        // Atualizar as regras da gramática para remover as regras lambda
         rules = newRules;
         removeDuplicateRules();
         removeSelfProducingStartRule();
     
-        // Etapa 5: Imprimir a gramática formatada sem regras lambda (para verificação)
+        // Imprimir a gramática formatada sem regras lambda (para verificação)
         printFormattedGrammar();
     }
     
@@ -334,8 +331,8 @@ public class CNFConverter {
         }
 
         for (String nonTerminal : non_terminal) {
-            Set<String> chained = new HashSet<>(); // U no pseudocódigo
-            Set<String> current = new HashSet<>(); // N no pseudocódigo
+            Set<String> chained = new HashSet<>(); 
+            Set<String> current = new HashSet<>();
             current.add(nonTerminal); // Começa com o próprio não terminal
 
             while (!current.isEmpty()) {
