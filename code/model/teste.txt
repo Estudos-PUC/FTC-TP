@@ -22,7 +22,7 @@ variables: A,B,C,D
 terminals: a,b,c
 start: A
 Regras
-A ABC D
+A ABC D C
 B b
 C c \
 D B
