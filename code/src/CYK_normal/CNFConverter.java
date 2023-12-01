@@ -1,6 +1,7 @@
 package CYK_normal;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -29,13 +30,15 @@ public class CNFConverter {
         this.startSymbol = grammar.startSymbol;
         this.variableIndex = 0;
 
-        
-        createNewStartSymbol();
+        // createNewStartSymbol();
         System.out.println("Nullable: " + findNullableVariables());
+        removeLambdaRules();
         System.out.println("Encadeadas: " + findChainedVariables());
         printFormattedGrammar();
-        breakDownProductions();
+        removeUnitaryRules();
         printFormattedGrammar();
+        //breakDownProductions();
+        //printFormattedGrammar();
     }
 
     public String getNextVariableName() {
@@ -181,6 +184,135 @@ public class CNFConverter {
         return nullableVariables;
     }
 
+    private void removeLambdaRules() {
+        // Etapa 1: Encontrar variáveis anuláveis
+        Set<String> nullableVariables = findNullableVariables();
+    
+        // Etapa 2: Inicializar um novo conjunto de regras sem regras lambda
+        Map<String, List<List<String>>> newRules = new HashMap<>();
+    
+        // Etapa 3: Iterar sobre as regras existentes e criar novas regras sem as variáveis anuláveis
+        for (Map.Entry<String, List<List<String>>> entry : rules.entrySet()) {
+            String variable = entry.getKey();
+            List<List<String>> productions = entry.getValue();
+            List<List<String>> newProductions = new ArrayList<>();
+    
+            for (List<String> production : productions) {
+                // Ignore regras lambda, exceto para o símbolo de partida
+                if (!(production.isEmpty() && !variable.equals(startSymbol))) {
+                    // Adicione a produção original, pois ela será usada para gerar combinações
+                    newProductions.add(new ArrayList<>(production));
+    
+                    // Gere e adicione todas as combinações possíveis que não incluem as variáveis anuláveis
+                    List<List<String>> combinations = generateCombinations(production, nullableVariables);
+                    newProductions.addAll(combinations);
+                }
+            }
+    
+            // Se a variável for o símbolo inicial e estiver entre as anuláveis, adicione a regra lambda
+            if (variable.equals(startSymbol) && nullableVariables.contains(startSymbol)) {
+                newProductions.add(Collections.emptyList());
+            }
+    
+            newRules.put(variable, newProductions);
+        }
+    
+        // Etapa 4: Atualizar as regras da gramática para remover as regras lambda
+        rules = newRules;
+        removeDuplicateRules();
+        removeSelfProducingStartRule();
+    
+        // Etapa 5: Imprimir a gramática formatada sem regras lambda (para verificação)
+        printFormattedGrammar();
+    }
+    
+    // Função que gera todas as combinações possíveis de uma produção sem as variáveis anuláveis.
+    private List<List<String>> generateCombinations(List<String> production, Set<String> nullableVariables) {
+        // Lista para armazenar todas as combinações
+        List<List<String>> combinations = new ArrayList<>();
+    
+        // Adiciona a produção original, a menos que seja vazia, o que indica uma regra lambda
+        if (!production.isEmpty()) {
+            combinations.add(new ArrayList<>(production));
+        }
+    
+        // Gera todas as combinações removendo variáveis anuláveis
+        generateCombinationsRecursive(combinations, new ArrayList<>(), production, 0, nullableVariables);
+    
+        return combinations;
+    }
+    
+    
+    private void generateCombinationsRecursive(List<List<String>> combinations, List<String> currentCombination,
+                                               List<String> remainingProduction, int index, Set<String> nullableVariables) {
+        if (index == remainingProduction.size()) {
+            // Se a combinação atual não é vazia e não é uma duplicata, adiciona à lista de combinações
+            if (!currentCombination.isEmpty() && !combinations.contains(currentCombination)) {
+                combinations.add(new ArrayList<>(currentCombination));
+            }
+            return;
+        }
+    
+        String symbol = remainingProduction.get(index);
+    
+        // Se o símbolo não é anulável ou é um terminal, mantém o símbolo e continua
+        if (!nullableVariables.contains(symbol)) {
+            currentCombination.add(symbol);
+            generateCombinationsRecursive(combinations, currentCombination, remainingProduction, index + 1, nullableVariables);
+            currentCombination.remove(currentCombination.size() - 1);
+        } else {
+            // Se o símbolo é anulável, gera combinações com e sem o símbolo
+    
+            // Combinação sem o símbolo anulável
+            generateCombinationsRecursive(combinations, currentCombination, remainingProduction, index + 1, nullableVariables);
+    
+            // Combinação com o símbolo anulável
+            currentCombination.add(symbol);
+            generateCombinationsRecursive(combinations, currentCombination, remainingProduction, index + 1, nullableVariables);
+            currentCombination.remove(currentCombination.size() - 1);
+        }
+    }
+    
+    private void removeDuplicateRules() {
+        // Novo mapa para armazenar as regras sem duplicatas
+        Map<String, List<List<String>>> newRules = new HashMap<>();
+    
+        // Iterar sobre cada entrada no mapa de regras
+        for (Map.Entry<String, List<List<String>>> entry : rules.entrySet()) {
+            String variable = entry.getKey();
+            List<List<String>> productions = entry.getValue();
+    
+            // Utilizar um conjunto para identificar produções únicas
+            Set<List<String>> uniqueProductions = new HashSet<>(productions);
+    
+            // Converter o conjunto de volta para uma lista e armazenar no novo mapa
+            newRules.put(variable, new ArrayList<>(uniqueProductions));
+        }
+    
+        // Atualizar as regras da classe para ser o novo mapa sem duplicatas
+        rules = newRules;
+    }
+
+    private void removeSelfProducingStartRule() {
+        // Lista para armazenar as novas produções que não incluem a produção unitária de partida
+        List<List<String>> newProductionsForStartSymbol = new ArrayList<>();
+    
+        // Obter as produções para a variável de partida
+        List<List<String>> startProductions = rules.get(startSymbol);
+    
+        // Iterar sobre cada produção da variável de partida
+        for (List<String> production : startProductions) {
+            // Se a produção não é uma produção unitária que referencia a própria variável de partida, adicioná-la à nova lista
+            if (!(production.size() == 1 && production.get(0).equals(startSymbol))) {
+                newProductionsForStartSymbol.add(production);
+            }
+        }
+    
+        // Atualizar as regras para a variável de partida, removendo a produção unitária que referencia a própria variável
+        rules.put(startSymbol, newProductionsForStartSymbol);
+    }
+    
+
     // --------------------------------------------------------------------
 
     // 3. ELIMINAR REGRAS UNITARIAS
@@ -221,6 +353,47 @@ public class CNFConverter {
 
         return chainedVariables;
     }
+
+    public void removeUnitaryRules() {
+        // Encontra todas as variáveis encadeadas
+        Map<String, Set<String>> chainedVariables = findChainedVariables();
+    
+        // Novo conjunto de regras sem regras unitárias
+        Map<String, List<List<String>>> newRules = new HashMap<>();
+    
+        // Iterar sobre todas as variáveis
+        for (String variable : non_terminal) {
+            // Inicializa a lista de novas produções para a variável atual
+            List<List<String>> newProductions = new ArrayList<>();
+    
+            // Obter o conjunto de variáveis encadeadas para a variável atual
+            Set<String> closure = chainedVariables.getOrDefault(variable, Collections.emptySet());
+    
+            // Para cada variável na clausura, adicione suas produções não-unitárias
+            for (String chainedVar : closure) {
+                // Iterar sobre as produções da variável encadeada
+                for (List<String> production : rules.get(chainedVar)) {
+                    // Verificar se a produção é unitária e se é diferente da variável atual
+                    if (production.size() == 1 && non_terminal.containsAll(production) && !production.contains(variable)) {
+                        continue; // Ignora regras unitárias
+                    }
+                    // Adiciona a produção à lista de novas produções se não for unitária
+                    newProductions.add(production);
+                }
+            }
+    
+            // Adiciona as novas produções ao conjunto de regras se não estiverem vazias
+            if (!newProductions.isEmpty()) {
+                newRules.put(variable, newProductions);
+            }
+        }
+    
+        // Atualiza as regras da gramática com o novo conjunto sem regras unitárias
+        rules = newRules;
+    
+        // Opcional: remover possíveis duplicatas após a remoção das regras unitárias
+        removeDuplicateRules();
+    }
     // --------------------------------------------------------------------
 
     // 3. GERAR NOVAS REGRAS E APLICAR SUBSTITUICOES PARA REGRAS DE TAMANHO MAIOR
@@ -230,14 +403,14 @@ public class CNFConverter {
     // 4. QUEBRA DE REGRAS ------------------------------
     private void breakDownProductions() {
         Map<String, String> symbolToVariableMap = new HashMap<>();
-    
+
         // Atualiza a estrutura de rules para lidar com a nova estrutura
         Map<String, List<List<String>>> newProductions = new HashMap<>();
-    
+
         for (Map.Entry<String, List<List<String>>> entry : rules.entrySet()) {
             String variable = entry.getKey();
             List<List<String>> ruleList = entry.getValue();
-    
+
             for (List<String> rule : ruleList) {
                 if (rule.size() > 2) {
                     String currentVariable = variable;
@@ -245,12 +418,12 @@ public class CNFConverter {
                         String nextSymbol = rule.get(i + 1);
                         String newVariable = symbolToVariableMap.getOrDefault(nextSymbol, getNextVariableName());
                         symbolToVariableMap.putIfAbsent(nextSymbol, newVariable);
-    
+
                         List<String> currentRule = new ArrayList<>();
                         currentRule.add(rule.get(i));
                         currentRule.add(newVariable);
                         newProductions.computeIfAbsent(currentVariable, k -> new ArrayList<>()).add(currentRule);
-    
+
                         currentVariable = newVariable;
                     }
                     // Adiciona a regra final que terá exatamente dois símbolos
@@ -259,18 +432,18 @@ public class CNFConverter {
                     finalRule.add(rule.get(rule.size() - 1));
                     newProductions.computeIfAbsent(currentVariable, k -> new ArrayList<>()).add(finalRule);
                 } else {
-                    // A regra já tem dois ou menos símbolos, então simplesmente a adicionamos às novas produções
+                    // A regra já tem dois ou menos símbolos, então simplesmente a adicionamos às
+                    // novas produções
                     newProductions.computeIfAbsent(variable, k -> new ArrayList<>()).add(new ArrayList<>(rule));
                 }
             }
         }
-    
+
         // Atualiza as produções de rules com as novas produções
         rules = newProductions;
-    
+
         // Atualiza os não terminais com as novas variáveis
         non_terminal.addAll(symbolToVariableMap.values());
     }
-    
 
 }
