@@ -31,7 +31,7 @@ public class CNFConverter {
 
         createNewStartSymbol();
         System.out.println("Nullable: " + findNullableVariables());
-        System.out.println(findChainedVariables());
+        System.out.println("Encadeadas: " + findChainedVariables());
     }
 
     public String getNextVariableName() {
@@ -144,8 +144,6 @@ public class CNFConverter {
     // --------------------------------------------------------------------
 
     // 2. ELIMINAR REGRAS LAMBDA ------------------------------
-    // ... restante da sua classe ...
-
     private Set<String> findNullableVariables() {
         Set<String> nullableVariables = new HashSet<>(); // VAg
         boolean changed;
