@@ -50,7 +50,7 @@ public class Main {
                 } catch (Exception e) {
                     System.out.println(false + "\n");
                 }
-                System.out.println("-----------------------------");
+                System.out.println("------------------------------");
             }
 
         }
