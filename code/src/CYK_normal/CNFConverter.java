@@ -29,9 +29,13 @@ public class CNFConverter {
         this.startSymbol = grammar.startSymbol;
         this.variableIndex = 0;
 
+        
         createNewStartSymbol();
         System.out.println("Nullable: " + findNullableVariables());
         System.out.println("Encadeadas: " + findChainedVariables());
+        printFormattedGrammar();
+        breakDownProductions();
+        printFormattedGrammar();
     }
 
     public String getNextVariableName() {
@@ -224,65 +228,49 @@ public class CNFConverter {
     // --------------------------------------------------------------------
 
     // 4. QUEBRA DE REGRAS ------------------------------
-
-    /*
-     * Alterar a estrutura do breakDownProductions lembrando que agora R representa
-     * g.productions e que tem essa estrutura:
-     * (Novo) Map<String, List<List<String>>> que é =! de Map<String, Set<String>>
-     * (antigo)
-     * 
-     * lembrando de tirar o Grammar e o return porque agora voce tem variaveis
-     * criadas no construtor
-     */
-    private Grammar /* remover return */ breakDownProductions(Grammar grammar) /* remover parametro */ {
+    private void breakDownProductions() {
         Map<String, String> symbolToVariableMap = new HashMap<>();
-        Map<String, Set<String>> newProductions = new HashMap<>();
-        List<String> allSymbols = new ArrayList<>();
-        allSymbols.addAll(grammar.terminals);
-        allSymbols.addAll(grammar.variables);
-        for (Map.Entry<String, Set<String>> entry : grammar.productions.entrySet()) {
+    
+        // Atualiza a estrutura de rules para lidar com a nova estrutura
+        Map<String, List<List<String>>> newProductions = new HashMap<>();
+    
+        for (Map.Entry<String, List<List<String>>> entry : rules.entrySet()) {
             String variable = entry.getKey();
-            Set<String> rules = entry.getValue();
-
-            for (String rule : rules) {
-                List<String> symbols = splitSymbols(allSymbols, rule);
-
-                if (symbols.size() > 2) {
+            List<List<String>> ruleList = entry.getValue();
+    
+            for (List<String> rule : ruleList) {
+                if (rule.size() > 2) {
                     String currentVariable = variable;
-                    for (int i = 0; i < symbols.size() - 2; i++) {
-                        String nextSymbol = symbols.get(i + 1);
-                        String newVariable = symbolToVariableMap.getOrDefault(nextSymbol,
-                                grammar.getNextVariableName());
+                    for (int i = 0; i < rule.size() - 2; i++) {
+                        String nextSymbol = rule.get(i + 1);
+                        String newVariable = symbolToVariableMap.getOrDefault(nextSymbol, getNextVariableName());
                         symbolToVariableMap.putIfAbsent(nextSymbol, newVariable);
-
-                        Set<String> currentRules = newProductions.computeIfAbsent(currentVariable,
-                                k -> new HashSet<>());/* alterar */
-                        currentRules.add(symbols.get(i) + newVariable);
-
+    
+                        List<String> currentRule = new ArrayList<>();
+                        currentRule.add(rule.get(i));
+                        currentRule.add(newVariable);
+                        newProductions.computeIfAbsent(currentVariable, k -> new ArrayList<>()).add(currentRule);
+    
                         currentVariable = newVariable;
                     }
-                    // Add the final rule which will have exactly two symbols
-                    newProductions.computeIfAbsent(currentVariable, k -> new HashSet<>())
-                            .add(symbols.get(symbols.size() - 2) + symbols.get(symbols.size() - 1));/* alterar */
+                    // Adiciona a regra final que terá exatamente dois símbolos
+                    List<String> finalRule = new ArrayList<>();
+                    finalRule.add(rule.get(rule.size() - 2));
+                    finalRule.add(rule.get(rule.size() - 1));
+                    newProductions.computeIfAbsent(currentVariable, k -> new ArrayList<>()).add(finalRule);
                 } else {
-                    // Rule already has two or fewer symbols, so we simply add it to the new
-                    // productions
-                    newProductions.computeIfAbsent(variable, k -> new HashSet<>()).add(rule);/* alterar */
+                    // A regra já tem dois ou menos símbolos, então simplesmente a adicionamos às novas produções
+                    newProductions.computeIfAbsent(variable, k -> new ArrayList<>()).add(new ArrayList<>(rule));
                 }
             }
         }
-
-        // Update the grammar's productions with the new productions, eliminating any
-        // duplicates
-        for (Map.Entry<String, Set<String>> entry : newProductions.entrySet()) /* alterar */ {
-            String variable = entry.getKey();
-            Set<String> newRules = entry.getValue();
-            grammar.productions.put(variable, newRules);/* alterar */
-        }
-
-        // Update the grammar's variables with the new variables
-        grammar.variables.addAll(symbolToVariableMap.values());
-        return grammar; /* remover return */
+    
+        // Atualiza as produções de rules com as novas produções
+        rules = newProductions;
+    
+        // Atualiza os não terminais com as novas variáveis
+        non_terminal.addAll(symbolToVariableMap.values());
     }
+    
 
 }
