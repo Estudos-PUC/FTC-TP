@@ -29,3 +29,14 @@ D B
 #
 dcb
 #
+variables: P,A,B,C
+terminals: a,b,c
+start: P
+Regras
+P APB C
+A AaaA \
+B Bb C
+C cC \
+#
+abc
+#
