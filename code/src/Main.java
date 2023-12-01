@@ -25,7 +25,7 @@ public class Main {
             	
             System.out.println("Gramatica:");
             System.out.println(tmp.productions);
-            System.out.println("-----------------------------");
+            System.out.println("---------------------------------");
             /*
              * Converter gramatica para a forma CNF
              */
