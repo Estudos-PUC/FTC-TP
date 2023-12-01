@@ -1,9 +1,5 @@
 package CYK_normal;
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import CYK_normal.CNFConverter;
 
 public class CYK {
 
@@ -13,13 +9,14 @@ public class CYK {
     List<String> allSymbols = new ArrayList<>();
     // Rules of the grammar
     Map<String, List<List<String>>> R = new HashMap<>();
-
+    String startSymbol;
     public CYK(CNFConverter grammar) {
         this.terminals = grammar.terminals;
         this.non_terminal = grammar.non_terminal;
         this.allSymbols.addAll(terminals);
         this.allSymbols.addAll(non_terminal);
         this.R = grammar.rules;
+        this.startSymbol = grammar.startSymbol;
     }
 
 
@@ -94,10 +91,9 @@ public class CYK {
             }
         }
 
-        // If word can be formed by rules
-        // of given grammar
+         // Supondo que CNFConverter tenha esse campo
         if (T.get(0) != null && T.get(0).get(n - 1) != null
-                && T.get(0).get(n - 1).size() != 0)
+                && T.get(0).get(n - 1).contains(startSymbol))
             System.out.println("True");
         else
             System.out.println("False");
