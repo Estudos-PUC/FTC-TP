@@ -34,7 +34,7 @@ public class Main {
             /*
              * Chamada do cyk normal e do cyk modificado
              */
-            CYK cyk = new CYK(cnf.g);
+            CYK cyk = new CYK(tmp.clone());
             CYKModified cykModified = new CYKModified(tmp.clone());
 
             /*
