@@ -3,7 +3,7 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import Gramatica.Grammar;
+import CYK_normal.CNFConverter;
 
 public class CYK {
 
@@ -14,53 +14,14 @@ public class CYK {
     // Rules of the grammar
     Map<String, List<List<String>>> R = new HashMap<>();
 
-    public CYK(Grammar grammar) {
+    public CYK(CNFConverter grammar) {
         this.terminals = grammar.terminals;
-        this.non_terminal = grammar.variables;
+        this.non_terminal = grammar.non_terminal;
         this.allSymbols.addAll(terminals);
         this.allSymbols.addAll(non_terminal);
-        this.R = splitRules(grammar);
+        this.R = grammar.rules;
     }
 
-    public Map<String, List<List<String>>> splitRules(Grammar grammar) {
-        Map<String, List<List<String>>> tmp = new HashMap<>();
-        
-        for (Map.Entry<String, Set<String>> entry : grammar.productions.entrySet()) {
-            String variable = entry.getKey();
-            Set<String> rules = entry.getValue();
-            List<List<String>> convertRules = new ArrayList<>();
-            List<String> symbols= new ArrayList<>();
-            for (String rule : rules) {
-                symbols = splitSymbols(allSymbols, rule);
-                convertRules.add(symbols);
-            }
-            tmp.put(variable, convertRules);
-        }
-        return tmp;
-    }
-    public List<String> splitSymbols(List<String> allSymbols, String input) {
-        // Ordenar os símbolos pelo comprimento em ordem decrescente
-
-        allSymbols.sort((a, b) -> b.length() - a.length());
-
-        // Criar uma expressão regular que combina com qualquer um dos símbolos
-        StringBuilder regex = new StringBuilder();
-        for (String symbol : allSymbols) {
-            if (regex.length() > 0) {
-                regex.append("|");
-            }
-            regex.append(Pattern.quote(symbol));
-        }
-
-        // Encontrar correspondências na string de entrada
-        Matcher matcher = Pattern.compile(regex.toString()).matcher(input);
-        List<String> splitSymbols = new ArrayList<>();
-        while (matcher.find()) {
-            splitSymbols.add(matcher.group());
-        }
-
-        return splitSymbols;
-    }
 
     // function to perform the CYK Algorithm
     public void cykParse(String word) {

@@ -31,11 +31,15 @@ public class Main {
              */
             CNFConverter cnf = new CNFConverter(tmp.clone());
 
+
             /*
              * Chamada do cyk normal e do cyk modificado
              */
-            CYK cyk = new CYK(tmp.clone());
+            CYK cyk = new CYK(cnf);
+            System.out.println("GRAMATICA NA CNF: ");
+            cnf.printFormattedGrammar();
             CYKModified cykModified = new CYKModified(tmp.clone());
+            
 
             /*
              * Testes de gramatica

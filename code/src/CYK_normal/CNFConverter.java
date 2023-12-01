@@ -30,16 +30,23 @@ public class CNFConverter {
         this.startSymbol = grammar.startSymbol;
         this.variableIndex = 0;
 
-        // createNewStartSymbol();
+        createNewStartSymbol();
         System.out.println("Nullable: " + findNullableVariables());
         removeLambdaRules();
         System.out.println("Encadeadas: " + findChainedVariables());
-        removeLambdaRules();
-        printFormattedGrammar();
-        removeUnitaryRules();
-        printFormattedGrammar();
-        //breakDownProductions();
         //printFormattedGrammar();
+        removeUnitaryRules();
+        System.out.println("\n\nELIMINACAO DE REGRAS UNITARIAS: ");
+        printFormattedGrammar();
+        
+        System.out.println("\n\nELIMINACAO DE TERMINAIS: ");
+        eliminateTerminalsFromProductions();
+        printFormattedGrammar();
+        
+        
+        System.out.println("\n\nQUEBRA DE PRODUCOES: ");
+        breakDownProductions();
+        printFormattedGrammar();
     }
 
     public String getNextVariableName() {
@@ -56,6 +63,7 @@ public class CNFConverter {
     }
 
     public void printFormattedGrammar() {
+        System.out.println("Variavel de Partida: " + startSymbol);
         // Imprime o conjunto de variáveis
         System.out.println("Variáveis: " + non_terminal);
 
@@ -399,48 +407,56 @@ public class CNFConverter {
 
     // 3. GERAR NOVAS REGRAS E APLICAR SUBSTITUICOES PARA REGRAS DE TAMANHO MAIOR
     // QUE 2
+    private void eliminateTerminalsFromProductions() {
+        // Inicializa um mapa temporário para armazenar as novas regras
+        Map<String, List<List<String>>> newRules = new HashMap<>();
+        
+        // Inicializa um mapa para controlar as variáveis que foram criadas para substituir terminais
+        Map<String, String> terminalToVariable = new HashMap<>();
+        
+        // Inicializa um conjunto para armazenar novas variáveis não-terminais
+        Set<String> newNonTerminals = new HashSet<>();
+    
+        for (String variable : new ArrayList<>(non_terminal)) { // Use uma cópia do conjunto para iteração
+            List<List<String>> updatedProductions = new ArrayList<>();
+    
+            for (List<String> production : rules.get(variable)) {
+                if (production.size() > 1) {
+                    List<String> newProduction = new ArrayList<>();
+                    for (String symbol : production) {
+                        if (terminals.contains(symbol)) {
+                            if (!terminalToVariable.containsKey(symbol)) {
+                                String newVariable = getNextVariableName();
+                                terminalToVariable.put(symbol, newVariable);
+                                newNonTerminals.add(newVariable);
+                                newRules.put(newVariable, Collections.singletonList(Collections.singletonList(symbol)));
+                            }
+                            newProduction.add(terminalToVariable.get(symbol));
+                        } else {
+                            newProduction.add(symbol);
+                        }
+                    }
+                    updatedProductions.add(newProduction);
+                } else {
+                    updatedProductions.add(production);
+                }
+            }
+    
+            newRules.put(variable, updatedProductions);
+        }
+    
+        // Agora atualize o conjunto non_terminal com as novas variáveis não-terminais
+        non_terminal.addAll(newNonTerminals);
+        
+        // Atualiza o mapa de regras da classe com as novas regras
+        rules.putAll(newRules);
+    }
+    
+    
+    
+
     // --------------------------------------------------------------------
 
-    private void removeLambdaRules() {
-        Set<String> nullableVariables = findNullableVariables(); // Usa o método já implementado para encontrar variáveis anuláveis
-        Map<String, List<List<String>>> newRules = new HashMap<>(); // R'
-    
-        // Para cada regra existente, gerar novas regras omitindo as variáveis anuláveis
-        for (Map.Entry<String, List<List<String>>> entry : rules.entrySet()) {
-            String variable = entry.getKey();
-            List<List<String>> productions = entry.getValue();
-    
-            // Adicionar todas as regras existentes que não são lambda
-            List<List<String>> newProductions = new ArrayList<>();
-            for (List<String> production : productions) {
-                if (!production.isEmpty()) {
-                    newProductions.add(new ArrayList<>(production));
-                }
-            }
-    
-            // Adicionar novas regras para cada combinação de variáveis anuláveis
-            for (List<String> production : productions) {
-                // Criar todas as combinações possíveis onde as variáveis anuláveis são omitidas
-                List<String> combination = new ArrayList<>(production);
-                combination.removeIf(nullableVariables::contains); // Remove variáveis anuláveis
-    
-                if (!combination.isEmpty() && !newProductions.contains(combination)) {
-                    newProductions.add(combination);
-                }
-            }
-    
-            newRules.put(variable, newProductions);
-        }
-    
-        // Para lidar com o caso especial do símbolo inicial
-        if (nullableVariables.contains(startSymbol)) {
-            List<String> lambdaProduction = new ArrayList<>();
-            newRules.get(startSymbol).add(lambdaProduction);
-        }
-    
-        // Atualiza o conjunto de regras de produção da classe
-        rules = newRules;
-    }
     // 4. QUEBRA DE REGRAS ------------------------------
     private void breakDownProductions() {
         Map<String, String> symbolToVariableMap = new HashMap<>();

@@ -1,52 +1,14 @@
-variables: L,S,E
-terminals: a,(,)
-start: L
+variables: S,A,B,C,D,E,F
+terminals: a,b,c,d
+start: S
 Regras
-L (S) E
-S SE \
-E a L S
+S AED F
+A Aa a
+B Bb b
+C Cc c
+D Dd d
+E bEc bc
+F aFd BC
 #
-dcb
-#
-variables: A,B,C,D
-terminals: a,b,c
-start: A
-Regras
-A ABC D C
-B b
-C c \
-D B
-#
-dcb
-#
-variables: P,A,B,C
-terminals: a,b,c
-start: P
-Regras
-P APB C
-A AaaA \
-B Bb C
-C cC \
-#
-abc
-#
-variables: E,T,F
-terminals: +,*,t,(,)
-start: E
-Regras
-E E+T T 
-T T*F F
-F (E) t
-#
-dcb
-#
-variables: L,S,E
-terminals: a,(,)
-start: L
-Regras
-L (S)
-S SE \
-E a L
-#
-dcb
+a
 #
