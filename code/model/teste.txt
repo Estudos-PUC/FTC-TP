@@ -1,14 +1,102 @@
-variables: S,A,B,C,D,E,F
+variables: S,A,B,C,D,E,F,H,I
 terminals: a,b,c,d
 start: S
 Regras
-S AED F
-A Aa a
-B Bb b
-C Cc c
-D Dd d
-E bEc bc
-F aFd BC
+S AED F SI HS
+A Aa a AB
+B Bb b BA
+C Cc c CI
+D Dd d DC
+E bEc bc EA
+F aFd BC FB
+H abbbbc HA
+I Id IA IH
 #
-a
+abcd
+aabcd
+aabbcc
+bbbbc
+#
+variables: S,A,B,C,D,E,F,G,H
+terminals: a,b,c,d
+start: S
+Regras
+S -> AB | CD
+A -> aA | a
+B -> bB | b
+C -> cC | c
+D -> dD | d
+E -> eE | e
+F -> fF | f
+G -> gG | g
+H -> hH | h
+#
+abcd
+aacd
+abdd
+accc
+#
+variables: X,Y,Z,W,V,U,T
+terminals: m,n,o,p
+start: X
+Regras
+X -> YZ | WV
+Y -> mM | m
+Z -> nZ | n
+W -> oW | o
+V -> pV | p
+U -> uU | u
+T -> tT | t
+#
+mnop
+mnp
+omon
+oppp
+#
+variables: M,N,O,P,Q
+terminals: x,y,z
+start: M
+Regras
+M -> NP | OQ
+N -> xN | x
+O -> yO | y
+P -> zP | z
+Q -> xzQ | xz
+#
+xyz
+xyzzzxz
+xxyzzz
+yxxzxz
+#
+variables: R,S,T,U,V,W
+terminals: a,b,c
+start: R
+Regras
+R -> ST | UV
+S -> aS | a
+T -> bT | b
+U -> cU | c
+V -> abV | ab
+W -> acW | ac
+#
+ab
+aabbb
+acab
+ccabab
+#
+variables: A,B,C,D,E,F
+terminals: 0,1
+start: A
+Regras
+A -> BC | DE
+B -> 0B | 0
+C -> 1C | 1
+D -> 01D | 01
+E -> 10E | 10
+F -> 0F1 | 01
+#
+01
+00110
+0101010
+011010
 #

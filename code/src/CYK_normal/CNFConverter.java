@@ -31,22 +31,22 @@ public class CNFConverter {
         this.variableIndex = 0;
 
         createNewStartSymbol();
-        System.out.println("Nullable: " + findNullableVariables());
+        //System.out.println("Nullable: " + findNullableVariables());
         removeLambdaRules();
-        System.out.println("Encadeadas: " + findChainedVariables());
+        //System.out.println("Encadeadas: " + findChainedVariables());
         //printFormattedGrammar();
         removeUnitaryRules();
-        System.out.println("\n\nELIMINACAO DE REGRAS UNITARIAS: ");
-        printFormattedGrammar();
+        //System.out.println("\n\nELIMINACAO DE REGRAS UNITARIAS: ");
+        //printFormattedGrammar();
         
-        System.out.println("\n\nELIMINACAO DE TERMINAIS: ");
+        //System.out.println("\n\nELIMINACAO DE TERMINAIS: ");
         eliminateTerminalsFromProductions();
-        printFormattedGrammar();
+        //printFormattedGrammar();
         
         
-        System.out.println("\n\nQUEBRA DE PRODUCOES: ");
+        //System.out.println("\n\nQUEBRA DE PRODUCOES: ");
         breakDownProductions();
-        printFormattedGrammar();
+        //printFormattedGrammar();
     }
 
     public String getNextVariableName() {
@@ -228,8 +228,6 @@ public class CNFConverter {
         removeDuplicateRules();
         removeSelfProducingStartRule();
     
-        // Imprimir a gramática formatada sem regras lambda (para verificação)
-        printFormattedGrammar();
     }
     
     // Função que gera todas as combinações possíveis de uma produção sem as variáveis anuláveis.

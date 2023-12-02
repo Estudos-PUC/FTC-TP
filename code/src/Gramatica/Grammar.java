@@ -42,4 +42,17 @@ public class Grammar implements Cloneable {
             throw new AssertionError();
         }
     }
+
+    public String getNextVariableName() {
+        if (variableIndex >= 26 * 101) { // Checa se excedeu o limite de Z100
+            throw new IllegalStateException("Excedido o número máximo de variáveis.");
+        }
+        int quotient = variableIndex / 101; // Calcula qual letra usar (0 para A, 1 para B, etc.)
+        int remainder = variableIndex % 101; // Calcula o número (0 a 100)
+        char nextChar = (char) ('A' + quotient);
+        String nextVariable = nextChar + String.format("%02d", remainder);
+        variableIndex++; // Incrementa o índice para a próxima variável
+        return nextVariable;
+    }
+
 }

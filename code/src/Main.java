@@ -13,7 +13,7 @@ public class Main {
         ALLGrammars allGrammars = new ALLGrammars();
 
         // Alterar o caminho se necessario
-        String path = "code/model/GLC.txt";
+        String path = "code/model/teste.txt";
         allGrammars.loadGrammar(path);
 
         try {
@@ -23,9 +23,9 @@ public class Main {
         }
         for (Grammar tmp : allGrammars.grammars) {
             	
-            System.out.println("Gramatica:");
-            System.out.println(tmp.productions);
-            System.out.println("---------------------------------");
+            //System.out.println("Gramatica:");
+            //System.out.println(tmp.productions);
+            //System.out.println("---------------------------------");
             /*
              * Converter gramatica para a forma CNF
              */
@@ -36,8 +36,8 @@ public class Main {
              * Chamada do cyk normal e do cyk modificado
              */
             CYK cyk = new CYK(cnf);
-            System.out.println("GRAMATICA NA CNF: ");
-            cnf.printFormattedGrammar();
+            //System.out.println("GRAMATICA NA CNF: ");
+            //cnf.printFormattedGrammar();
             CYKModified cykModified = new CYKModified(tmp.clone());
             
 
