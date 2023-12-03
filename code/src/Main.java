@@ -1,62 +1,59 @@
 import Gramatica.ALLGrammars;
 import Gramatica.Grammar;
 import CYK_Mod.*;
-import CYK_normal.CNFConverter;
 import CYK_normal.*;
+import java.io.PrintWriter;
+import java.io.FileNotFoundException;
 
 public class Main {
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
 
-        /*
-         * Ler gramaticas do arquivo txt e inserir em um Array de gramaticas
-         */
-        ALLGrammars allGrammars = new ALLGrammars();
+        // Definindo o caminho do arquivo de saída
+        String outputPath = "code/model/output.txt";
 
-        // Alterar o caminho se necessario
-        String path = "code/model/teste.txt";
-        allGrammars.loadGrammar(path);
-
-        try {
-            allGrammars.loadGrammar(path);
-        } catch (Exception e) {
-            System.out.println("Erro na leitura");
-        }
-        for (Grammar tmp : allGrammars.grammars) {
-            	
-            //System.out.println("Gramatica:");
-            //System.out.println(tmp.productions);
-            //System.out.println("---------------------------------");
-            /*
-             * Converter gramatica para a forma CNF
-             */
-            CNFConverter cnf = new CNFConverter(tmp.clone());
-
-
-            /*
-             * Chamada do cyk normal e do cyk modificado
-             */
-            CYK cyk = new CYK(cnf);
-            //System.out.println("GRAMATICA NA CNF: ");
-            //cnf.printFormattedGrammar();
-            CYKModified cykModified = new CYKModified(tmp.clone());
-            
-
-            /*
-             * Testes de gramatica
-             */
-            for (String tmpWord : tmp.word) {
-                System.out.println(tmpWord);
-                System.out.print("cyk Normal: ");
-                cyk.cykParse(tmpWord + "\n");
-                try {
-                    System.out.print("cyk Modificado: ");
-                    System.out.println(cykModified.runCYKAlgorithm(tmpWord) + "\n");
-                } catch (Exception e) {
-                    System.out.println(false + "\n");
-                }
-                System.out.println("------------------------------");
+        System.out.println("Processando...");
+        try (PrintWriter writer = new PrintWriter(outputPath)) {
+            ALLGrammars allGrammars = new ALLGrammars();
+            String path = "code/model/teste2.txt";
+            try {
+                allGrammars.loadGrammar(path);
+            } catch (Exception e) {
+                writer.println("Erro na leitura");
             }
+            for (Grammar tmp : allGrammars.grammars) {
+                writer.println(tmp.toString());
+                for (String tmpWord : tmp.word) {
+                    try {
+                        long startTimeCYK = System.currentTimeMillis();
+                        CNFConverter cnf = new CNFConverter(tmp.clone());
+                        CYK cyk = new CYK(cnf);
+                        writer.println("Word: " + tmpWord + "\n");
 
+                        writer.print("cyk Normal: ");
+                        writer.println(cyk.cykParse(tmpWord));
+                        long endTimeCYK = System.currentTimeMillis();
+                        writer.println("Tempo CYK Normal: " + (endTimeCYK - startTimeCYK) + "ms" + "\n");
+                    } catch (Exception e) {
+                        writer.println("Erro: existe uma variavel declarada que não tem nenhuma regra associada \n");
+                    }
+
+                    long startTimeCYKMod = System.currentTimeMillis();
+                    CYKModified cykModified = new CYKModified(tmp.clone());
+                    try {
+                        writer.print("cyk Modificado: ");
+                        writer.println(cykModified.runCYKAlgorithm(tmpWord));
+                    } catch (Exception e) {
+                        writer.println(false);
+                    }
+                    long endTimeCYKMod = System.currentTimeMillis();
+                    writer.println("Tempo CYK Modificado: " + (endTimeCYKMod - startTimeCYKMod) + "ms");
+                    writer.println("------------------------------");
+                }
+            }
+        } catch (FileNotFoundException e) {
+            System.err.println("Não foi possível criar o arquivo de saída: " + outputPath);
         }
+        System.out.println("Concluido =)");
+        System.out.println("Para acessar entre em model/output.txt");
     }
 }

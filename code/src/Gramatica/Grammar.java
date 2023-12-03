@@ -43,6 +43,18 @@ public class Grammar implements Cloneable {
         }
     }
 
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Variables: ").append(variables.toString()).append("\n");
+        sb.append("Terminals: ").append(terminals.toString()).append("\n");
+        sb.append("Productions:\n");
+        for (Map.Entry<String, Set<String>> entry : productions.entrySet()) {
+            sb.append("  ").append(entry.getKey()).append(" -> ").append(entry.getValue().toString()).append("\n");
+        }
+        sb.append("Start Symbol: ").append(startSymbol).append("\n");
+        return sb.toString();
+    }
+
     public String getNextVariableName() {
         if (variableIndex >= 26 * 101) { // Checa se excedeu o limite de Z100
             throw new IllegalStateException("Excedido o número máximo de variáveis.");

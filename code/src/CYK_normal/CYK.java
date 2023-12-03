@@ -20,12 +20,11 @@ public class CYK {
     }
 
 
-    public void cykParse(String word) {
+    public boolean cykParse(String word) {
         List<String> w = new ArrayList<>();
         for (int i = 0; i < word.length(); i++) {
             w.add("" + word.charAt(i));
         }
-        w.remove(w.size()-1);
         int n = w.size();
 
         // Inicializar a tabela
@@ -92,8 +91,8 @@ public class CYK {
 
         if (T.get(0) != null && T.get(0).get(n - 1) != null
                 && T.get(0).get(n - 1).contains(startSymbol))
-            System.out.println("true");
+            return true;
         else
-            System.out.println("false");
+            return false;
     }
 }

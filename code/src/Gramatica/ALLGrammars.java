@@ -26,6 +26,7 @@ public class ALLGrammars {
                         Arrays.asList(sc.nextLine().replace("terminals: ", "").split(",")));
                 String startSymbol = sc.nextLine().replace("start: ", "");
                 // Ler producoes
+                sc.nextLine();
                 String line = sc.nextLine();
 
                 while (!(line.equals("#"))) {

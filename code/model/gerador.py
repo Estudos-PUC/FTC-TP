@@ -33,7 +33,7 @@ def generate_combinations(symbol, depth, max_depth):
     return combinations
 
 # Gerar combinações
-max_depth = 5  # Limitar a profundidade para evitar recursão infinita
+max_depth = 5   	  # Limitar a profundidade para evitar recursão infinita
 start_symbol = "S"  # Símbolo inicial
 
 # Gerar combinações a partir do símbolo inicial
@@ -43,6 +43,7 @@ terminal_combinations = generate_combinations(start_symbol, 0, max_depth)
 unique_combinations = set(filter(None, terminal_combinations))
 
 # Exibir as combinações
+print(len(unique_combinations))
 for combo in unique_combinations:
-    print(combo)
+   print(combo)
 

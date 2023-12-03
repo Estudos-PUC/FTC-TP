@@ -1,0 +1,504 @@
+Variables: [P, Q, M, N, O]
+Terminals: [x, y, z]
+Productions:
+  P -> [zP, z]
+  Q -> [xz, xzQ]
+  M -> [NP, OQ]
+  N -> [xN, x]
+  O -> [yO, y]
+Start Symbol: M
+
+Word: yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyxzxzxzxzxzxzxzxzxzxzxzxzxzxzxzxzxzxzxzxzxzxzxzxzxzxzxzxzxzxzxzxzxzxzxzxzxzxzxz
+
+cyk Normal: true
+Tempo CYK Normal: 782ms
+
+cyk Modificado: true
+Tempo CYK Modificado: 271ms
+------------------------------
+Word: yyyyxzxxyzzzxzxyzxxyzxxyzxxyzxxyzxxyzxxyzxxyzxxyzxxyzxxyzxxyzxxyzxxyzxxyzxxyzxxyzxxyzxxyzxxyzxxyzxxyzx
+
+cyk Normal: false
+Tempo CYK Normal: 115ms
+
+cyk Modificado: false
+Tempo CYK Modificado: 24ms
+------------------------------
+Word: yyyyxzxxxyzzzyxxzxzyxxzxzyxxzxzyxxzxzyxxzxzyxxzxzyxxzxzyxxzxzyxxzxzyxxzxzyxxzxzyxxzxzyxxzxzyxxzxzyxxzxzyxxzxzyxxzxz
+
+cyk Normal: false
+Tempo CYK Normal: 142ms
+
+cyk Modificado: false
+Tempo CYK Modificado: 47ms
+------------------------------
+Variables: [R, S, T, U, V, W]
+Terminals: [a, b, c]
+Productions:
+  R -> [ST, UV]
+  S -> [a, aS]
+  T -> [bT, b]
+  U -> [cU, c]
+  V -> [ab, abV]
+  W -> [ac, acW]
+Start Symbol: R
+
+Word: abaabbbaabbbaabbbabaabbbaabbbaabbbabaabbbaabbbaabbbabaabbbaabbbaabbbabaabbbaabbbaabbbabaabbbaabbbaabbbabaabbbaabbbaabbbabaabbbaabbbaabbb
+
+cyk Normal: false
+Tempo CYK Normal: 85ms
+
+cyk Modificado: false
+Tempo CYK Modificado: 110ms
+------------------------------
+Word: aabbbaabbbaabbbaabbbaabbbaabbbaabbbaabbbaabbbaabbbaabbbaabbbaabbbaabbbaabbbaabbbaabbbaabbbaabbbaabbbaabbbaabbbaabbbaabbb
+
+cyk Normal: false
+Tempo CYK Normal: 57ms
+
+cyk Modificado: false
+Tempo CYK Modificado: 71ms
+------------------------------
+Word: ccababaabbbaabbbaabbbaabbbaabbbaabbbaabbbaabbbccababaabbbaabbbaabbbaabbbaabbbaabbbaabbbaabbbccababaabbbaabbbaabbbaabbbaabbbaabbbaabbbaabbb
+
+cyk Normal: false
+Tempo CYK Normal: 118ms
+
+cyk Modificado: false
+Tempo CYK Modificado: 84ms
+------------------------------
+Variables: [A, B, C, D, E, F]
+Terminals: [0, 1]
+Productions:
+  A -> [BC, DE]
+  B -> [0, 0B]
+  C -> [1, 1C]
+  D -> [01, 01D]
+  E -> [10E, 10]
+  F -> [01, 0F1]
+Start Symbol: A
+
+Word: 010011000110001100011000110001100011000110010011000110001100011000110001100011000110010011000110001100011000110001100011000110010011000110001100011000110001100011000110
+
+cyk Normal: false
+Tempo CYK Normal: 223ms
+
+cyk Modificado: false
+Tempo CYK Modificado: 175ms
+------------------------------
+Word: 01010100101010010101001010100101010010101001010100101010010101001010100101010010101001010100101010010101001010100101010010101001010100101010010101001010100101010010101001010100101010
+
+cyk Normal: false
+Tempo CYK Normal: 218ms
+
+cyk Modificado: false
+Tempo CYK Modificado: 193ms
+------------------------------
+Word: 011010011010011010011010011010011010011010011010011010011010011010011010011010011010011010011010011010011010011010011010011010011010011010011010011010011010011010011010011010011010011010011010011010011010011010011010
+
+cyk Normal: false
+Tempo CYK Normal: 332ms
+
+cyk Modificado: false
+Tempo CYK Modificado: 315ms
+------------------------------
+Variables: [T, E, F, I]
+Terminals: [0, a, 1, b, (, ), *, +]
+Productions:
+  T -> [T*F, F]
+  E -> [T, E+T]
+  F -> [bI, aI, (E)]
+  I -> [1I, 0I, /]
+Start Symbol: E
+
+Word: a0a0a0a0a0a0a0a0a0aaaaaaaaaaaaaabbbbbbbba0a0a0a0a0a0a0a0a0aaaaaaaaaaaaaabbbbbbbba0a0a0a0a0a0a0a0a0aaaaaaaaaaaaaabbbbbbbba0a0a0a0a0a0a0a0a0aaaaaaaaaaaaaabbbbbbbba0a0a0a0a0a0a0a0a0aaaaaaaaaaaaaabbbbbbbba0a0a0a0a0a0a0a0a0aaaaaaaaaaaaaabbbbbbbb
+
+cyk Normal: false
+Tempo CYK Normal: 863ms
+
+cyk Modificado: false
+Tempo CYK Modificado: 341ms
+------------------------------
+Word: (b0+b)*a1(b0+b)*a1(b0+b)*a1(b0+b)*a1(b0+b)*a1(b0+b)*a1(b0+b)*a1(b0+b)*a1(b0+b)*a1(b0+b)*a1(b0+b)*a1(b0+b)*a1(b0+b)*a1(b0+b)*a1(b0+b)*a1(b0+b)*a1
+
+cyk Normal: false
+Tempo CYK Normal: 185ms
+
+cyk Modificado: false
+Tempo CYK Modificado: 80ms
+------------------------------
+Word: b1+((a0+a1)*b0)b1+((a0+a1)*b0)b1+((a0+a1)*b0)b1+((a0+a1)*b0)b1+((a0+a1)*b0)b1+((a0+a1)*b0)b1+((a0+a1)*b0)b1+((a0+a1)*b0)b1+((a0+a1)*b0)b1+((a0+a1)*b0)b1+((a0+a1)*b0)b1+((a0+a1)*b0)b1+((a0+a1)*b0)
+
+cyk Normal: false
+Tempo CYK Normal: 466ms
+
+cyk Modificado: false
+Tempo CYK Modificado: 198ms
+------------------------------
+Variables: [A, S, Z]
+Terminals: [0, 1]
+Productions:
+  A -> [A1, A0, /]
+  S -> [Z1Z1Z1A]
+  Z -> [Z0, /]
+Start Symbol: S
+
+Word: 11110101011010101101010110101011010101101010110101011010101
+
+cyk Normal: true
+Tempo CYK Normal: 48ms
+
+cyk Modificado: true
+Tempo CYK Modificado: 11ms
+------------------------------
+Word: 00101010110101011010101111011101110111011101110111011101110111011101110111011101110111011101110111011101110
+
+cyk Normal: true
+Tempo CYK Normal: 266ms
+
+cyk Modificado: true
+Tempo CYK Modificado: 68ms
+------------------------------
+Word: 0111001011001011001011001011001011001011001011001011001011001011001011001011001011001011001011001011001011001011001011001011001011
+
+cyk Normal: true
+Tempo CYK Normal: 506ms
+
+cyk Modificado: true
+Tempo CYK Modificado: 120ms
+------------------------------
+Variables: [S]
+Terminals: [0, 1]
+Productions:
+  S -> [0, 1, 0S0, 0S1, 1S0, 1S1]
+Start Symbol: S
+
+Word: 01010110101101011010110101101010101011010110101101011010110101010101101011010110101101011010101010110101101011010110101101010101011010110101101011010110101010101101011010110101101011010101010110101101011010110101101010101011010110101101011010110101
+
+cyk Normal: false
+Tempo CYK Normal: 1164ms
+
+cyk Modificado: false
+Tempo CYK Modificado: 334ms
+------------------------------
+Word: 111111111111111111111110010010000101001010101010000000011111011111111111010010101010100101010010010010101010101000000
+
+cyk Normal: true
+Tempo CYK Normal: 114ms
+
+cyk Modificado: true
+Tempo CYK Modificado: 43ms
+------------------------------
+Word: 1111111111111111111110000000000000000000011111111111111111111100000000000000000000111111111111111111110111111111111111111111000000000000000000001111111111111111111110000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001111111
+
+cyk Normal: false
+Tempo CYK Normal: 2149ms
+
+cyk Modificado: false
+Tempo CYK Modificado: 608ms
+------------------------------
+Variables: [A, S, C, D, E]
+Terminals: [a, b, c]
+Productions:
+  A -> [Aa, /]
+  S -> [AE, DC]
+  C -> [Cc, /]
+  D -> [aDb, /]
+  E -> [bEc, /]
+Start Symbol: S
+
+Word: abcaaaaaaaaaaaaaaabaaaaababababbabababbaaaaaaa
+
+cyk Normal: false
+Tempo CYK Normal: 7ms
+
+cyk Modificado: false
+Tempo CYK Modificado: 2ms
+------------------------------
+Word: abcccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+
+cyk Normal: true
+Tempo CYK Normal: 63ms
+
+cyk Modificado: true
+Tempo CYK Modificado: 31ms
+------------------------------
+Word: aabbabbbaaabbbbabababbbababbbbbaaaabbbbaaa
+
+cyk Normal: false
+Tempo CYK Normal: 4ms
+
+cyk Modificado: false
+Tempo CYK Modificado: 2ms
+------------------------------
+Variables: [A, B, S, C, D, E, F]
+Terminals: [a, b, c, d]
+Productions:
+  A -> [Aa, a]
+  B -> [Bb, b]
+  S -> [AED, F]
+  C -> [Cc, c]
+  D -> [Dd, d]
+  E -> [bEc, bc]
+  F -> [BC, aFd]
+Start Symbol: S
+
+Word: aaddbcaddbcaddbcaddbcaddbcaddbcaddbc
+
+cyk Normal: false
+Tempo CYK Normal: 3ms
+
+cyk Modificado: false
+Tempo CYK Modificado: 2ms
+------------------------------
+Word: caddbcaddbcaddbcaddbcaddbcaddbcaddbcaddbcaddbcaddbc
+
+cyk Normal: false
+Tempo CYK Normal: 5ms
+
+cyk Modificado: false
+Tempo CYK Modificado: 4ms
+------------------------------
+Word: addbcaddbcaddbcaddbcaddbcaddbcaddbcaddbcccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+
+cyk Normal: false
+Tempo CYK Normal: 112ms
+
+cyk Modificado: false
+Tempo CYK Modificado: 82ms
+------------------------------
+Variables: [P, A, B]
+Terminals: [a, b]
+Productions:
+  P -> [A, BPA]
+  A -> [aA, /]
+  B -> [Bba, /]
+Start Symbol: P
+
+Word: bbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
+cyk Normal: false
+Tempo CYK Normal: 14ms
+
+cyk Modificado: false
+Tempo CYK Modificado: 7ms
+------------------------------
+Word: bbbbbaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+
+cyk Normal: false
+Tempo CYK Normal: 6ms
+
+cyk Modificado: false
+Tempo CYK Modificado: 3ms
+------------------------------
+Word: bbbbbaabbbbbaabbbbbaabbbbbaabbbbbaabbbbbaabbbbbaabbbbbaabbbbbaa
+
+cyk Normal: false
+Tempo CYK Normal: 9ms
+
+cyk Modificado: false
+Tempo CYK Modificado: 4ms
+------------------------------
+Variables: [P, A]
+Terminals: [a, b]
+Productions:
+  P -> [aPa, aAb, bPb]
+  A -> [aA, Ab, /]
+Start Symbol: P
+
+Word: aaaaabbbbabbaababbabbbbbbbbbbbbbaaaaabbbbabbaababbabbbbbbbbbbbbbaaaaabbbbabbaababbabbbbbbbbbbbbbaaaaabbbbabbaababbabbbbbbbbbbbbbaaaaabbbbabbaababbabbbbbbbbbbbbb
+
+cyk Normal: true
+Tempo CYK Normal: 207ms
+
+cyk Modificado: true
+Tempo CYK Modificado: 124ms
+------------------------------
+Word: ababababbababbababaaaaaaaaaaaaaaaaaaaaaaababababababaabbaaababababababaabbaaababababababaabbaaababababababaabbaaababababababaabbaa
+
+cyk Normal: true
+Tempo CYK Normal: 122ms
+
+cyk Modificado: true
+Tempo CYK Modificado: 65ms
+------------------------------
+Word: ababababababaabbaaababababababaabbaaababababababaabbaaababababababaabbaaababababababaabbaa
+
+cyk Normal: true
+Tempo CYK Normal: 39ms
+
+cyk Modificado: true
+Tempo CYK Modificado: 19ms
+------------------------------
+Variables: [A, B, C, D, E, F]
+Terminals: [0, 1]
+Productions:
+  A -> [ABC, AEF, BD]
+  B -> [0, B0]
+  C -> [0C, EB]
+  D -> [1, 1D]
+  E -> [BE]
+  F -> [1, 1F1]
+Start Symbol: A
+
+Word: 000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+
+cyk Normal: false
+Tempo CYK Normal: 232ms
+
+cyk Modificado: false
+Tempo CYK Modificado: 111ms
+------------------------------
+Word: 11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111
+
+cyk Normal: false
+Tempo CYK Normal: 603ms
+
+cyk Modificado: false
+Tempo CYK Modificado: 435ms
+------------------------------
+Word: 111111101010101000010101100000111111101010101000010101100000111111101010101000010101100000111111101010101000010101100000111111101010101000010101100000
+
+cyk Normal: false
+Tempo CYK Normal: 119ms
+
+cyk Modificado: false
+Tempo CYK Modificado: 104ms
+------------------------------
+Variables: [P, A, B, C]
+Terminals: [a, b, c]
+Productions:
+  P -> [APB, C]
+  A -> [AaaA, /]
+  B -> [BBb, C]
+  C -> [cC, /]
+Start Symbol: P
+
+Word: abcabcbabcabbabcabcabcbabcabbabcabcabcbabcabbabcabcabcbabcabbabcabcabcbabcabbabcabcabcbabcabbabcabcabcbabcabbabcabcabcbabcabbabcabcabcbabcabbabcabcabcbabcabbabc
+
+cyk Normal: false
+Tempo CYK Normal: 314ms
+
+cyk Modificado: false
+Tempo CYK Modificado: 105ms
+------------------------------
+Word: aabbccaabbccaabbccaabbccaabbccaabbccaabbccaabbccaabbccaabbccaabbccaabbccaabbccaabbcc
+
+cyk Normal: false
+Tempo CYK Normal: 55ms
+
+cyk Modificado: false
+Tempo CYK Modificado: 16ms
+------------------------------
+Word: ccaabbccbcabbabcbcabbabcbcabbabcbcabbabcbcabbabcbcabbabcbcabbabcbcabbabcbcabbabc
+
+cyk Normal: false
+Tempo CYK Normal: 49ms
+
+cyk Modificado: false
+Tempo CYK Modificado: 12ms
+------------------------------
+Variables: [A, B, C, D]
+Terminals: [b, c, d]
+Productions:
+  A -> [CB]
+  B -> [b, BBD]
+  C -> [BBC, Dc]
+  D -> [AD, d]
+Start Symbol: A
+
+Word: ddbdddbdddbdddbdddbdddbdddbdddbdddbdddbdddbdddbdbbbbbbbbbbbbbbbbbbbbbbbbb
+
+cyk Normal: false
+Tempo CYK Normal: 7ms
+
+cyk Modificado: false
+Tempo CYK Modificado: 7ms
+------------------------------
+Word: ddbdddbdddbdddbdddbdddbdddbdddbdddbdddbdddbdddbdddbdddbdddbd
+
+cyk Normal: false
+Tempo CYK Normal: 6ms
+
+cyk Modificado: false
+Tempo CYK Modificado: 4ms
+------------------------------
+Word: bccddddbdcdddbccddddbdcdddbccddddbdcdddbccddddbdcdddbccddddbdcdddbccddddbdcdddbccddddbdcdddbccddddbdcdddbccddddbdcdddbccddddbdcddd
+
+cyk Normal: false
+Tempo CYK Normal: 42ms
+
+cyk Modificado: false
+Tempo CYK Modificado: 45ms
+------------------------------
+Variables: [P, A, B, C]
+Terminals: [a, b, c]
+Productions:
+  P -> [A, BC]
+  A -> [B, C]
+  B -> [bB, b]
+  C -> [cC, c]
+Start Symbol: P
+
+Word: bcbcbcbcbcbcbcbcbbaaaaaaaacacacaaccacacababaaabbabbacacacacacacabababababacacccacacc
+
+cyk Normal: false
+Tempo CYK Normal: 152ms
+
+cyk Modificado: false
+Tempo CYK Modificado: 14ms
+------------------------------
+Word: bbbcccccccbbbbbbbbbbbbbbbbbbbbbcccccccccccccccccccbcbbcbcbcbcbcbcbbcbcbbcbcbbcbbbbcbbbbcbcbbbcbcbbcbbcbbcbcbc
+
+cyk Normal: false
+Tempo CYK Normal: 122ms
+
+cyk Modificado: false
+Tempo CYK Modificado: 24ms
+------------------------------
+Word: ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbcccccccccccccccccc
+
+cyk Normal: false
+Tempo CYK Normal: 97ms
+
+cyk Modificado: false
+Tempo CYK Modificado: 71ms
+------------------------------
+Variables: [A, B, S, C, D, E, F, H, I]
+Terminals: [a, b, c, d]
+Productions:
+  A -> [Aa, a, AB]
+  B -> [Bb, b, BA]
+  S -> [AED, F, SI, HS]
+  C -> [Cc, c, CI]
+  D -> [Dd, d, DC]
+  E -> [bEc, bc, EA]
+  F -> [BC, FB, aFd]
+  H -> [HA, abbbbc]
+  I -> [IA, Id, IH]
+Start Symbol: S
+
+Word: abbbbcaaababbbbcabbcadcabbbbcaaababbbbcabbcadcabbbbcaaababbbbcabbcadcabbbbcaaababbbbcabbcadcabbbbcaaababbbbcabbcadcabbbbcaaababbbbcabbcadcabbbbcaaababbbbcabbcadcabbbbcaaababbbbcabbcadcabbbbcaaababbbbcabbcadcabbbbcaaababbbbcabbcadcabbbbcaaababbbbcabbcadcabbbbcaaababbbbcabbcadcabbbbcaaababbbbcabbcadcabbbbcaaababbbbcabbcadcabbbbcaaababbbbcabbcadcabbbbcaaababbbbcabbcadcabbbbcaaababbbbcabbcadcabbbbcaaababbbbcabbcadc
+
+cyk Normal: false
+Tempo CYK Normal: 6805ms
+
+cyk Modificado: false
+Tempo CYK Modificado: 3161ms
+------------------------------
+Word: abbbbcaaaaabbabbbbcaadcccabbccaabddcccc
+
+cyk Normal: true
+Tempo CYK Normal: 9ms
+
+cyk Modificado: true
+Tempo CYK Modificado: 3ms
+------------------------------
+Word: abbbbcaaababbbbcabbcadcabbbbcaaababbbbcabbcadcabbbbcaaababbbbcabbcadcabbbbcaaababbbbcabbcadcabbbbcaaaba
+
+cyk Normal: false
+Tempo CYK Normal: 131ms
+
+cyk Modificado: false
+Tempo CYK Modificado: 56ms
+------------------------------
